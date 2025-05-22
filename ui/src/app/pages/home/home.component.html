@@ -1,0 +1,28 @@
+<section class="hero-section">
+  <div class="hero-content">
+    <h1>Argan d'ici</h1>
+    <h2>Pur comme là-bas. Savourez l'or du Maroc.</h2>
+    <button routerLink="/products" class="discover-btn">Découvrir nos produits</button>
+  </div>
+</section>
+
+<section class="featured-products-section">
+  <h2>Nos Produits Phares</h2>
+  <div class="products-grid">
+    <app-product-card *ngFor="let product of featuredProducts" [product]="product"></app-product-card>
+  </div>
+  <button routerLink="/products" class="view-all-btn">Voir tous les produits</button>
+</section>
+
+<section class="our-dna-section">
+  <div class="dna-content">
+    <img src="assets/images/dna-background.jpg" alt="Récolte d'argan" class="dna-image">
+    <div class="dna-text">
+      <h2>Notre ADN : La Pureté du Maroc à Votre Porte</h2>
+      <p>Découvrez notre histoire, de la récolte artisanale dans le sud d'Essaouira à la pression à froid qui préserve
+        toutes les vertus de l'or liquide du Maroc. Chaque goutte est le fruit d'un savoir-faire ancestral et d'un
+        engagement pour la qualité.</p>
+      <button routerLink="/about-us" class="learn-more-btn">En savoir plus sur notre histoire</button>
+    </div>
+  </div>
+</section>

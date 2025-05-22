@@ -1,0 +1,21 @@
+<header class="main-header">
+  <div class="logo-container">
+    <a routerLink="/">
+      <img src="assets/images/argan_logo.png" alt="Argan d'ici Logo" class="logo-img">
+    </a>
+  </div>
+  <nav class="main-nav">
+    <ul>
+      <li><a routerLink="/products">Nos Produits</a></li>
+      <li><a routerLink="/about-us">Notre ADN</a></li>
+      <li><a routerLink="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="user-actions">
+    <a routerLink="/cart" class="cart-icon">
+      🛒 <span class="cart-count">{{ cartItemCount }}</span>
+    </a>
+    <a *ngIf="!isLoggedIn" routerLink="/auth/login" class="login-btn">Connexion</a>
+    <a *ngIf="isLoggedIn" routerLink="/dashboard" class="dashboard-btn">Mon Compte</a>
+  </div>
+</header>

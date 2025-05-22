@@ -1,0 +1,119 @@
+/* ui/src/app/components/header/header.component.scss */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--brand-secondary);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box; /* Correction du problème de découpage */
+
+  .logo-container {
+    .logo-img {
+      height: 60px;
+      width: auto;
+      display: block; /* Évite les espaces sous l'image */
+    }
+  }
+
+  .main-nav {
+    ul {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        margin: 0 1.5rem;
+        a {
+          text-decoration: none;
+          color: var(--brand-primary);
+          font-weight: bold;
+          font-size: 1.1rem;
+          transition: color 0.2s ease-in-out;
+
+          &:hover {
+            color: var(--brand-accent);
+          }
+        }
+      }
+    }
+  }
+
+  .user-actions {
+    display: flex;
+    align-items: center;
+
+    .cart-icon {
+      font-size: 1.8rem;
+      margin-right: 1.5rem;
+      color: var(--brand-primary);
+      position: relative;
+      text-decoration: none;
+
+      .cart-count {
+        background-color: var(--brand-accent);
+        color: var(--text-light); /* Utilisation de la variable d'origine */
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 50%;
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        min-width: 20px;
+        text-align: center;
+      }
+    }
+
+    .login-link { /* Nouveau style pour le lien de connexion */
+      color: var(--brand-primary); /* Texte en marron */
+      padding: 0.7rem 1.2rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: color 0.2s ease-in-out;
+
+      &:hover {
+        color: var(--brand-accent); /* Changement de couleur au survol */
+      }
+    }
+
+    .dashboard-btn { /* Style du bouton mon compte (si connecté) */
+      background-color: var(--brand-primary);
+      color: var(--text-light); /* Utilisation de la variable d'origine */
+      padding: 0.8rem 1.5rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: var(--brand-primary-hover);
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1rem;
+
+    .main-nav ul {
+      flex-direction: column;
+      margin-top: 1rem;
+      li {
+        margin: 0.5rem 0;
+      }
+    }
+
+    .user-actions {
+      margin-top: 1rem;
+    }
+  }
+}

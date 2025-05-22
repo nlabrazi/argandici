@@ -1,1 +1,75 @@
-/* You can add global styles to this file, and also import other style files */
+/* ui/src/styles.scss */
+
+/* Variables CSS pour les couleurs de la marque Argan d'ici (RESTORED + HOVER) */
+:root {
+  --brand-primary: #4A2D0C;   /* Marron foncé */
+  --brand-primary-hover: #3a2409; /* Version plus foncée du marron pour le hover */
+  --brand-secondary: #D4C2A3; /* Beige/marron clair */
+  --brand-accent: #8B9B5C;    /* Vert olive */
+  --brand-accent-hover: #7b8e51; /* Version plus foncée du vert pour le hover */
+  --text-light: #f5f5f5;      /* Texte clair */
+  --text-dark: #333333;       /* Texte foncé */
+  --neutral-light: #eeeeee;   /* Fond neutre clair */
+  --border-color: #e0e0e0;     /* Couleur de bordure subtile */
+}
+
+/* Réinitialisation de base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif; /* Conservez Arial si non chargée */
+  color: var(--text-dark); /* Utilisation de la variable d'origine */
+  background-color: var(--neutral-light); /* Utilisation de la variable d'origine */
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Styles pour les liens */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Styles pour les boutons génériques */
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* Styles génériques pour les sections de contenu */
+section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+
+/* Styles génériques pour les titres */
+h1 {
+  font-size: 3rem;
+  color: var(--brand-primary);
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+  color: var(--brand-primary);
+  margin-bottom: 2rem;
+}
+
+h3 {
+  font-size: 1.8rem;
+  color: var(--brand-primary);
+  margin-bottom: 1rem;
+}

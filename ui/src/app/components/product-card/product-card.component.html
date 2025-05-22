@@ -1,0 +1,10 @@
+<div class="product-card">
+  <img [src]="product.image" alt="{{ product.name }}" class="product-image">
+  <h3 class="product-name">{{ product.name }}</h3>
+  <p class="product-price">{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr' }}</p>
+  <p class="product-description">{{ product.description | slice:0:100 }}...</p>
+  <div class="card-actions">
+    <button class="add-to-cart-btn">Ajouter au Panier</button>
+    <a routerLink="/products/{{ product.id }}" class="view-details-link">Voir détails</a>
+  </div>
+</div>

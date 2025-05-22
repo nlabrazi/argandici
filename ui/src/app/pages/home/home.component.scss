@@ -1,0 +1,142 @@
+/* ui/src/app/pages/home/home.component.scss */
+.hero-section {
+  background-image: url('../../assets/images/hero-background.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--text-light);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: var(--text-light);
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      margin-bottom: 2.5rem;
+      color: #f0f0f0;
+      font-weight: normal;
+    }
+
+    .discover-btn {
+      background-color: var(--brand-accent);
+      color: var(--text-light);
+      padding: 1.2rem 3rem;
+      font-size: 1.3rem;
+      &:hover {
+        background-color: var(--brand-accent-hover);
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 1.5rem; }
+    .discover-btn { font-size: 1rem; padding: 1rem 2rem; }
+  }
+}
+
+.featured-products-section {
+  padding: 4rem 2rem;
+  background-color: var(--neutral-light);
+
+  h2 {
+    font-size: 2.5rem;
+    color: var(--brand-primary);
+    margin-bottom: 3rem;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto 2rem auto;
+  }
+
+  .view-all-btn {
+    background-color: var(--brand-primary);
+    color: var(--text-light);
+    &:hover {
+      background-color: var(--brand-primary-hover);
+    }
+  }
+}
+
+.our-dna-section {
+  padding: 4rem 2rem;
+  background-color: var(--brand-secondary);
+  color: var(--brand-primary);
+
+  .dna-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 3rem;
+
+    .dna-image {
+      max-width: 450px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .dna-text {
+      flex: 1;
+      min-width: 300px;
+      text-align: left;
+
+      h2 {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        color: var(--brand-primary);
+      }
+
+      p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+      }
+
+      .learn-more-btn {
+        background-color: var(--brand-accent);
+        color: var(--text-light);
+        &:hover {
+          background-color: var(--brand-accent-hover);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .dna-content {
+      flex-direction: column;
+      .dna-image { margin-bottom: 2rem; }
+      .dna-text { text-align: center; }
+    }
+  }
+}
