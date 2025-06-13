@@ -13,5 +13,11 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.0",
     "prettier": "^3.5.3"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^3.21.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "framer-motion": "^12.17.3"
   }
 }

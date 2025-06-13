@@ -25,3 +25,9 @@
   # ...renvoient la page principale de l'application Angular.
   to = "/index.html"
   status = 200
+
+[functions]
+  # On configure spécifiquement notre fonction "api"
+  [functions.api]
+    # On dit au bundler de ne pas inclure ces paquets optionnels de NestJS
+    external_node_modules = ["@nestjs/websockets", "@nestjs/microservices"]
