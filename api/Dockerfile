@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-ARG NODE_IMAGE=node:18-alpine
+ARG NODE_IMAGE=node:22-alpine
 
 ########################################
 # 1) BASE (installe dev + prod deps)  #

@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-ARG NODE_IMAGE=node:18.20.8-alpine3.21
+ARG NODE_IMAGE=node:22-alpine
 
 ##################################
 #      1) DEPS DE BASE           #
