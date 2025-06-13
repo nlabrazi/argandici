@@ -1,0 +1,27 @@
+# netlify.toml
+
+# Configuration du build
+[build]
+  # La commande pour tout compiler
+  command = "npm run build"
+
+  # Le dossier contenant le site statique (l'UI Angular)
+  publish = "ui/dist/ui/browser"
+
+  # Le dossier où se trouvent nos fonctions serveur (l'API)
+  functions = "netlify/functions"
+
+# Configuration des redirections (le GPS)
+[[redirects]]
+  # Toutes les requêtes qui commencent par /api/...
+  from = "/api/*"
+  # ...sont redirigées vers notre fonction API.
+  to = "/.netlify/functions/api/:splat"
+  status = 200 # C'est une réécriture, pas une redirection 301
+
+[[redirects]]
+  # Toutes les autres requêtes...
+  from = "/*"
+  # ...renvoient la page principale de l'application Angular.
+  to = "/index.html"
+  status = 200
