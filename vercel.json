@@ -9,21 +9,18 @@
       "src": "ui/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist/ui/browser"
+        "distDir": "dist/ui"
       }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api"
-    },
-    {
-      "handle": "filesystem"
+      "dest": "/api/src/main.ts"
     },
     {
       "src": "/(.*)",
-      "dest": "/ui"
+      "dest": "/ui/server.ts"
     }
   ]
 }
