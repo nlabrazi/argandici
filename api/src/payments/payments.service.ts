@@ -9,23 +9,43 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PaymentsService {
-  private stripe: Stripe;
-  private domainUrl: string;
+  private stripe: Stripe | null = null;
+  private domainUrl: string | null = null;
 
   constructor(
     private prisma: PrismaService,
-    private config: ConfigService, // ✅ injecte le config service
-  ) {
-    const key = this.config.get<string>('STRIPE_SECRET_KEY');
-    this.domainUrl = this.config.get<string>('DOMAIN_URL') ?? 'http://localhost:4200';
+    private config: ConfigService,
+  ) { }
 
-    if (!key) {
-      throw new Error('STRIPE_SECRET_KEY is not set');
+  private initStripe(): Stripe {
+    if (!this.stripe) {
+      const key = this.config.get<string>('STRIPE_SECRET_KEY');
+      if (!key) {
+        throw new Error('STRIPE_SECRET_KEY is not set');
+      }
+
+      this.stripe = new Stripe(key, {
+        apiVersion: '2025-05-28.basil',
+      });
+
+      console.log('[PaymentsService] Stripe initialized lazily');
     }
 
-    this.stripe = new Stripe(key, {
-      apiVersion: '2025-05-28.basil',
-    });
+    return this.stripe;
+  }
+
+  private getDomainUrl(): string {
+    if (!this.domainUrl) {
+      const url = this.config.get<string>('DOMAIN_URL');
+      if (!url) {
+        console.warn('[PaymentsService] DOMAIN_URL not set, fallback to localhost');
+        this.domainUrl = 'http://localhost:4200';
+      } else {
+        this.domainUrl = url;
+      }
+    }
+
+    return this.domainUrl;
   }
 
   async createCheckoutSession(orderId: string) {
@@ -43,7 +63,10 @@ export class PaymentsService {
       throw new BadRequestException('Commande déjà traitée');
     }
 
-    const session = await this.stripe.checkout.sessions.create({
+    const stripe = this.initStripe();
+    const domain = this.getDomainUrl();
+
+    const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       payment_method_types: ['card'],
       line_items: order.items.map((item) => ({
@@ -60,8 +83,8 @@ export class PaymentsService {
           },
         },
       })),
-      success_url: `${this.domainUrl}/order/success?orderId=${orderId}`,
-      cancel_url: `${this.domainUrl}/order/cancel?orderId=${orderId}`,
+      success_url: `${domain}/order/success?orderId=${orderId}`,
+      cancel_url: `${domain}/order/cancel?orderId=${orderId}`,
       metadata: {
         orderId,
       },

@@ -27,7 +27,14 @@
   status = 200
 
 [functions]
+  # Configuration globale pour toutes les fonctions
+  node_bundler = "esbuild"
+
   # On configure spécifiquement notre fonction "api"
   [functions.api]
-    # On dit au bundler de ne pas inclure ces paquets optionnels de NestJS
-    external_node_modules = ["@nestjs/websockets", "@nestjs/microservices"]
+    # Modules à ne pas inclure dans le bundle (inutile ici si non utilisés)
+    external_node_modules = [
+      "@nestjs/websockets",
+      "@nestjs/microservices",
+      "@vendia/serverless-express"
+    ]

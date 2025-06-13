@@ -4,15 +4,23 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class StripeService {
-  private stripe: Stripe;
+  private stripe: Stripe | null = null;
 
-  constructor(private config: ConfigService) {
-    const key = this.config.get<string>('STRIPE_SECRET_KEY');
-    if (!key) throw new Error('STRIPE_SECRET_KEY is not set');
+  constructor(private config: ConfigService) { }
 
-    this.stripe = new Stripe(key, {
-      apiVersion: '2025-05-28.basil',
-    });
+  private getStripe(): Stripe {
+    if (!this.stripe) {
+      const key = this.config.get<string>('STRIPE_SECRET_KEY');
+      if (!key) throw new Error('STRIPE_SECRET_KEY is not set');
+
+      this.stripe = new Stripe(key, {
+        apiVersion: '2025-05-28.basil',
+      });
+
+      console.log('[StripeService] Stripe initialized lazily');
+    }
+
+    return this.stripe;
   }
 
   async createCheckoutSession(
@@ -22,11 +30,14 @@ export class StripeService {
   ): Promise<string> {
     const successUrl = this.config.get<string>('STRIPE_SUCCESS_URL');
     const cancelUrl = this.config.get<string>('STRIPE_CANCEL_URL');
+
     if (!successUrl || !cancelUrl) {
       throw new Error('STRIPE_SUCCESS_URL or STRIPE_CANCEL_URL not set');
     }
 
-    const session = await this.stripe.checkout.sessions.create({
+    const stripe = this.getStripe(); // 💡 Initialisation paresseuse
+
+    const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
       line_items: items.map((item) => ({
@@ -37,13 +48,12 @@ export class StripeService {
         },
         quantity: item.quantity,
       })),
-      metadata: { orderId }, // <-- metadata bien injecté
-      customer_email: customerEmail, // pour prefill si dispo
+      metadata: { orderId },
+      customer_email: customerEmail,
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
 
-    // 🔍 debug pour vérifier la metadata EN DEV
     console.log('[StripeService] session created:', {
       id: session.id,
       metadata: session.metadata,

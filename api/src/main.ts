@@ -1,3 +1,5 @@
+// api/src/main.ts
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as express from 'express';
@@ -9,26 +11,24 @@ async function bootstrap() {
     bodyParser: false,
   });
 
-  // --- Config here ---
   app.use('/webhooks/stripe', express.raw({ type: () => true }));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
   app.setGlobalPrefix('api');
   app.enableCors({
     origin: [
       'http://localhost:4000',
       'https://argandici.com',
       'https://www.argandici.com',
-      // URL preview for Netlify here
     ],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
+
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
-  // --- Start le serveur without condition ---
   await app.listen(3000, '0.0.0.0');
-  console.log(`🚀 API running for Docker on: ${await app.getUrl()}`);
+  console.log(`🚀 API running on ${await app.getUrl()}`);
 }
 
 bootstrap();

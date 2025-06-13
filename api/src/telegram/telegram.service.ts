@@ -4,26 +4,34 @@ import axios from 'axios';
 
 @Injectable()
 export class TelegramService {
-  private readonly token: string;
-  private readonly chatId: string;
+  private token: string | null = null;
+  private chatId: string | null = null;
   private readonly logger = new Logger(TelegramService.name);
 
-  constructor(private config: ConfigService) {
-    const token = this.config.get<string>('TELEGRAM_BOT_TOKEN');
-    const chatId = this.config.get<string>('TELEGRAM_CHAT_ID');
+  constructor(private config: ConfigService) { }
 
-    if (!token || !chatId) {
-      throw new Error(
-        'TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not set in .env',
-      );
+  private ensureInit() {
+    if (!this.token || !this.chatId) {
+      const token = this.config.get<string>('TELEGRAM_BOT_TOKEN');
+      const chatId = this.config.get<string>('TELEGRAM_CHAT_ID');
+
+      if (!token || !chatId) {
+        throw new Error(
+          'TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not set in env vars',
+        );
+      }
+
+      this.token = token;
+      this.chatId = chatId;
+      console.log('[TelegramService] Initialised');
     }
-
-    this.token = token;
-    this.chatId = chatId;
   }
 
   async sendPhotoWithCaption(caption: string, imageUrl?: string) {
+    this.ensureInit();
+
     const photo =
+      imageUrl ??
       'https://www.lasavonneriebourbonnaise.fr/815-large_default/huile-argan-flacon-verre-100ml.jpg';
     const url = `https://api.telegram.org/bot${this.token}/sendPhoto`;
 

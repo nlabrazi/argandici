@@ -1,38 +1,45 @@
-// netlify/functions/api.ts
-import { NestFactory } from '@nestjs/core';
+import { Handler } from '@netlify/functions';
+import serverlessExpress from '@vendia/serverless-express';
 import { AppModule } from '../../api/src/app.module';
+import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import express from 'express';
+import { ValidationPipe } from '@nestjs/common';
 
-// Cette variable permet de ne pas redémarrer toute l'app à chaque requête
-let cachedServer;
+let cachedServer: Handler;
 
-async function bootstrap() {
-  if (!cachedServer) {
-    const expressApp = express();
-    const nestApp = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
+async function bootstrap(): Promise<Handler> {
+  const expressApp = express();
 
-    // On s'assure que le préfixe est bien là
-    nestApp.setGlobalPrefix('api');
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp), {
+    bodyParser: false, // pour Stripe
+  });
 
-    // On active CORS
-    nestApp.enableCors();
+  app.use('/webhooks/stripe', express.raw({ type: () => true }));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-    await nestApp.init();
-    cachedServer = expressApp;
-  }
-  return cachedServer;
+  app.setGlobalPrefix('api');
+
+  app.enableCors({
+    origin: [
+      'http://localhost:4200',
+      'https://argandici.com',
+      'https://www.argandici.com',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+
+  await app.init();
+  return serverlessExpress({ app: expressApp });
 }
 
-export const handler = async (event, context) => {
-  const server = await bootstrap();
-  // On utilise directement le serveur Express avec le contexte de Netlify
-  return new Promise((resolve, reject) => {
-    server(event, context, (err, result) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(result);
-    });
-  });
+export const handler: Handler = async (event, context) => {
+  if (!cachedServer) {
+    cachedServer = await bootstrap();
+  }
+  return cachedServer(event, context);
 };

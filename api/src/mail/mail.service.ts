@@ -6,10 +6,13 @@ import Mailgun from 'mailgun.js';
 export class MailService {
   private readonly logger = new Logger(MailService.name);
   private mgClient: any;
-  private readonly domain: string;
-  private readonly fromEmail: string;
+  private domain: string;
+  private fromEmail: string;
+  private initialized = false;
 
-  constructor() {
+  private init() {
+    if (this.initialized) return;
+
     const apiKey = process.env.MAILGUN_API_KEY;
     this.domain = process.env.MAILGUN_DOMAIN!;
     this.fromEmail = process.env.MAILGUN_FROM ?? `postmaster@${this.domain}`;
@@ -27,6 +30,8 @@ export class MailService {
       key: apiKey,
       url: 'https://api.eu.mailgun.net',
     });
+
+    this.initialized = true;
   }
 
   async sendOrderConfirmation(to: string, html: string) {
