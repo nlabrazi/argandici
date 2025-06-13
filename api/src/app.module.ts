@@ -9,7 +9,6 @@ import { OrdersModule } from './orders/orders.module';
 import { MailModule } from './mail/mail.module';
 import { PaymentsModule } from './payments/payments.module';
 import { StripeModule } from './stripe/stripe.module';
-import { StripeController } from './stripe/stripe.controller';
 import { StripeWebhooksController } from './webhooks/stripe-webhooks.controller';
 import { TelegramModule } from './telegram/telegram.module';
 import { PdfModule } from './pdf/pdf.module';
@@ -30,7 +29,7 @@ import { ContactController } from './contact/contact.controller';
     PdfModule,
     SupabaseModule,
   ],
-  controllers: [AppController, StripeController, StripeWebhooksController, ContactController],
+  controllers: [AppController, StripeWebhooksController, ContactController],
   providers: [AppService],
 })
 export class AppModule { }
