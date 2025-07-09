@@ -40,24 +40,29 @@
 </template>
 
 <script setup lang="ts">
+
+import asset1 from '@/assets/images/asset_1.jpg'
+import asset2 from '@/assets/images/asset_2.jpg'
+import asset3 from '@/assets/images/asset_3.jpg'
+
 const products = [
   {
     name: "Argan Cosmétique",
     description: "Pour une peau nourrie et des cheveux revitalisés",
     price: "À partir de 24€",
-    image: "/images/asset_1.jpg"
+    image: asset1
   },
   {
     name: "Argan Culinaire",
     description: "L'huile gourmande aux notes de noisette",
     price: "À partir de 28€",
-    image: "/images/asset_2.jpg"
+    image: asset2
   },
   {
     name: "Collection Prestige",
     description: "L'huile d'argan la plus rare et la plus pure",
     price: "À partir de 42€",
-    image: "/images/asset_3.jpg"
+    image: asset3
   }
 ]
 </script>

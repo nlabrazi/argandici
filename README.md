@@ -76,7 +76,7 @@
 * [![Nuxt.js][Nuxt.js]][Nuxt-url]
 * [![TailwindCSS][TailwindCSS.js]][TailwindCSS-url]
 * [![Netlify][Netlify.com]][Netlify-url]
-* [!TypeScript][TypeScript.js][TypeScript-url]
+* [![TypeScript][TypeScript.js]][TypeScript-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
