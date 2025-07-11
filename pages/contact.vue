@@ -20,18 +20,16 @@
               required />
             <FormError v-if="errors.name" :error="errors.name" />
           </div>
-
           <div>
             <label for="email" class="block mb-2 text-sm font-medium text-argan-dark">Email</label>
             <input type="email" id="email" v-model="form.email" :class="inputClass(errors.email)"
               placeholder="votre@email.com" required />
             <FormError v-if="errors.email" :error="errors.email" />
           </div>
-
           <div>
             <label for="subject" class="block mb-2 text-sm font-medium text-argan-dark">Sujet</label>
             <select id="subject" v-model="form.subject" :class="inputClass(errors.subject)" required>
-              <option value="" disabled selected>Sélectionnez un sujet</option>
+              <option value="" disabled>Sélectionnez un sujet</option>
               <option value="Commande">Question sur une commande</option>
               <option value="Produit">Information sur un produit</option>
               <option value="Livraison">Question sur la livraison</option>
@@ -40,33 +38,100 @@
             </select>
             <FormError v-if="errors.subject" :error="errors.subject" />
           </div>
-
           <div>
             <label for="message" class="block mb-2 text-sm font-medium text-argan-dark">Message</label>
             <textarea id="message" v-model="form.message" rows="6" :class="inputClass(errors.message)"
               placeholder="Votre message..." required></textarea>
             <FormError v-if="errors.message" :error="errors.message" />
           </div>
-
           <button type="submit" :disabled="loading"
-            class="w-full bg-argan-gold hover:bg-argan-dark text-white font-medium py-3 px-6 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+            class="w-full bg-argan-gold hover:bg-argan-dark text-gray font-medium py-3 px-6 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
             <span v-if="!loading">Envoyer le message</span>
             <span v-else>Envoi en cours...</span>
           </button>
-
-          <div v-if="success" class="mt-4 p-4 bg-green-50 text-green-700 rounded-lg">
-            Merci pour votre message ! Nous vous répondrons dans les plus brefs délais.
-          </div>
-          <div v-if="error" class="mt-4 p-4 bg-red-50 text-red-700 rounded-lg">
-            Une erreur s'est produite. Veuillez réessayer ou nous contacter directement par email.
-          </div>
         </form>
       </div>
-
       <!-- Informations de contact et carte -->
       <div class="space-y-8">
-        <!-- ... (reprendre ton HTML infos, carte Google Maps, réseaux sociaux) ... -->
-        <!-- Coller ici le code contact + réseaux + Google Map déjà fourni -->
+        <div class="bg-argan-light rounded-2xl p-8">
+          <h2 class="font-serif text-xl text-argan-dark mb-4">Nos coordonnées</h2>
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <svg class="h-6 w-6 text-argan-gold mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <div>
+                <p class="font-medium text-argan-dark">Email</p>
+                <a href="mailto:contact@argandici.com"
+                  class="text-gray-600 hover:text-argan-gold transition">contact&#64;argandici.com</a>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <svg class="h-6 w-6 text-argan-gold mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              <div>
+                <p class="font-medium text-argan-dark">Téléphone</p>
+                <a href="tel:+33685958472" class="text-gray-600 hover:text-argan-gold transition">+33 6 85 95 84 72</a>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <svg class="h-6 w-6 text-argan-gold mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <div>
+                <p class="font-medium text-argan-dark">Adresse</p>
+                <p class="text-gray-600">123 Rue de l'Arganier</p>
+                <p class="text-gray-600">75000 Paris, France</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <svg class="h-6 w-6 text-argan-gold mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <p class="font-medium text-argan-dark">Horaires</p>
+                <p class="text-gray-600">Lundi-Vendredi: 9h-18h</p>
+                <p class="text-gray-600">Samedi: 10h-16h</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <i class="fas fa-share-alt text-argan-gold text-xl mr-3 mt-1"></i>
+              <div>
+                <p class="font-medium text-argan-dark">Suivez-nous</p>
+                <div class="flex space-x-4 mt-2">
+                  <a href="https://facebook.com/argandici" target="_blank"
+                    class="text-gray-600 hover:text-[#1877F2] transition">
+                    <i class="fab fa-facebook-f text-xl"></i>
+                  </a>
+                  <a href="https://instagram.com/argandici" target="_blank"
+                    class="text-gray-600 hover:text-[#E1306C] transition">
+                    <i class="fab fa-instagram text-xl"></i>
+                  </a>
+                  <a href="https://tiktok.com/@argandici" target="_blank"
+                    class="text-gray-600 hover:text-[#000000] transition">
+                    <i class="fab fa-tiktok text-xl"></i>
+                  </a>
+                  <a href="https://snapchat.com/add/argandici" target="_blank"
+                    class="text-gray-600 hover:text-[#FFFC00] transition">
+                    <i class="fab fa-snapchat-ghost text-xl"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-2xl overflow-hidden shadow-lg">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d83998.947226665!2d2.277019647334117!3d48.85883773913617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis!5e0!3m2!1sfr!2sfr!4v1632920000000!5m2!1sfr!2sfr"
+            width="100%" height="300" style="border:0;" allowfullscreen loading="lazy"></iframe>
+        </div>
       </div>
     </div>
   </section>
@@ -74,6 +139,9 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+import { useNotificationStore } from '~/stores/notifications'
+
+const notificationStore = useNotificationStore()
 
 const form = reactive({
   name: '',
@@ -83,8 +151,6 @@ const form = reactive({
 })
 
 const loading = ref(false)
-const success = ref(false)
-const error = ref(false)
 const errors = reactive<{ [key: string]: string }>({})
 
 function validate() {
@@ -98,19 +164,14 @@ function validate() {
 async function onSubmit() {
   if (!validate()) return
   loading.value = true
-  success.value = false
-  error.value = false
-
   try {
     await $fetch('/api/contact', { method: 'POST', body: { ...form } })
     Object.keys(form).forEach((k) => {
       (form as any)[k] = ''
     })
-
-    success.value = true
-    setTimeout(() => (success.value = false), 4000)
+    notificationStore.showToast('Merci pour votre message ! Nous vous répondrons rapidement.', 'success')
   } catch (e) {
-    error.value = true
+    notificationStore.showToast('Erreur lors de l’envoi du message. Essayez à nouveau ou contactez-nous par email.', 'error')
   } finally {
     loading.value = false
   }
@@ -122,15 +183,10 @@ function inputClass(err: string | undefined) {
     err ? "border-red-400 ring-red-100" : "border-argan-light"
   ]
 }
-</script>
 
-<script lang="ts">
-export default {
-  components: {
-    FormError: {
-      props: { error: String },
-      template: `<div class="mt-1 text-sm text-red-500">{{ error }}</div>`
-    }
-  }
+// Composant local pour affichage erreur champ
+const FormError = {
+  props: { error: String },
+  template: `<div class="mt-1 text-sm text-red-500">{{ error }}</div>`
 }
 </script>
