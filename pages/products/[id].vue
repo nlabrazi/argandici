@@ -1,10 +1,21 @@
 <template>
   <section class="max-w-7xl mx-auto py-12 px-4 md:px-8">
+
+    <!-- Retour -->
+    <NuxtLink to="/products"
+      class="inline-flex items-center gap-2 text-argan-gold hover:text-argan-dark font-medium mb-8 transition"
+      v-if="!isLoading">
+      <i class="fas fa-arrow-left"></i>
+      Retour aux produits
+    </NuxtLink>
+
+    <!-- Loader -->
     <div v-if="isLoading" class="flex flex-col items-center justify-center py-24">
       <div class="w-12 h-12 border-4 border-argan-gold border-t-transparent rounded-full animate-spin"></div>
       <p class="mt-4 text-argan-dark">Chargement du produit...</p>
     </div>
 
+    <!-- Page Produit -->
     <div v-else-if="product" class="grid grid-cols-1 lg:grid-cols-2 gap-12">
       <!-- Galerie d'images -->
       <div>
@@ -19,7 +30,7 @@
         </div>
       </div>
 
-      <!-- Détails produit -->
+      <!-- Détails produit + Add to cart -->
       <div>
         <span class="bg-argan-gold text-white px-3 py-1 rounded-full text-sm">
           {{ product.category }}
@@ -48,6 +59,29 @@
           </span>
         </p>
 
+        <!-- Add to cart section -->
+        <div v-if="product.stock > 0" class="mb-8 flex items-center gap-6">
+          <div class="flex items-center border border-gray-300 rounded-full">
+            <button class="px-4 py-2 text-gray-600 hover:text-argan-gold" @click="decreaseQuantity"
+              :disabled="quantity <= 1">
+              <i class="fas fa-minus"></i>
+            </button>
+            <span class="px-4 py-2 font-medium">{{ quantity }}</span>
+            <button class="px-4 py-2 text-gray-600 hover:text-argan-gold" @click="increaseQuantity"
+              :disabled="quantity >= product.stock">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <button
+            class="bg-argan-gold hover:bg-argan-dark text-white py-3 px-6 rounded-full font-medium transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            @click="addToCart" :disabled="quantity < 1 || quantity > product.stock || addingToCart">
+            <span v-if="!addingToCart"><i class="fas fa-shopping-cart mr-2"></i> Ajouter au panier</span>
+            <span v-else><i class="fas fa-spinner fa-spin mr-2"></i> Ajout...</span>
+          </button>
+        </div>
+        <div v-else class="mb-8 text-red-600 font-medium">Ce produit est actuellement indisponible.</div>
+
+        <!-- Infos détaillées -->
         <div class="border border-argan-light rounded-xl mt-8">
           <div class="border-b border-argan-light">
             <div class="px-6 py-4 font-medium text-argan-dark">Description complète</div>
@@ -66,7 +100,7 @@
           <div>
             <div class="px-6 py-4 font-medium text-argan-dark">Utilisation</div>
             <div class="px-6 pb-4 text-gray-700">
-              {{ product.usage || 'Aucune information d\'utilisation disponible.' }}
+              {{ product.usage || "Aucune information d'utilisation disponible." }}
             </div>
           </div>
         </div>
@@ -90,11 +124,17 @@
 import { ref, watch, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProductsStore } from '~/stores/products'
+import { useCartStore } from '~/stores/cart'
+import { useNotificationStore } from '~/stores/notifications'
 
 const route = useRoute()
 const productsStore = useProductsStore()
+const cart = useCartStore()
+const notifications = useNotificationStore()
 const isLoading = ref(true)
 const selectedImage = ref<string | undefined>()
+const quantity = ref(1)
+const addingToCart = ref(false)
 
 const product = computed(() => {
   return productsStore.products.find(p => p.id === route.params.id)
@@ -113,8 +153,36 @@ watch(() => route.params.id, () => {
 function updateSelectedImage() {
   if (product.value) {
     selectedImage.value = product.value.images?.[0] || product.value.image
+    quantity.value = 1
   } else {
     selectedImage.value = undefined
+    quantity.value = 1
   }
+}
+
+function increaseQuantity() {
+  if (product.value && quantity.value < product.value.stock) {
+    quantity.value++
+  }
+}
+
+function decreaseQuantity() {
+  if (quantity.value > 1) {
+    quantity.value--
+  }
+}
+
+async function addToCart() {
+  if (!product.value || quantity.value < 1) return
+  addingToCart.value = true
+  // Appelle ton store/cart ici selon API de ton store
+  cart.addToCart({
+    productId: product.value.id,
+    name: product.value.name,
+    price: product.value.price,
+    image: product.value.image,
+  }, quantity.value)
+  notifications.showToast('Produit ajouté au panier !', 'success')
+  setTimeout(() => { addingToCart.value = false }, 1000)
 }
 </script>
