@@ -1,0 +1,84 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // à adapter à Supabase
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  price       Float
+  description String
+  image       String
+  stock       Int
+  createdAt   DateTime @default(now())
+  category    String
+
+  orderItems  OrderItem[]
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(CLIENT)
+  createdAt DateTime @default(now())
+
+  orders    Order[]
+}
+
+model Order {
+  id              String         @id @default(uuid())
+  total           Float
+  status          OrderStatus    @default(PENDING)
+  date            DateTime       @default(now())
+  userId          String?
+  email           String?
+  shippingProvider String?
+  shippingStatus  ShippingStatus @default(PREPARING)
+  trackingNumber  String?
+  addressLine1    String?
+  addressLine2    String?
+  city            String?
+  country         String?
+  fullName        String?
+  postalCode      String?
+
+  user        User?      @relation(fields: [userId], references: [id])
+  orderItems  OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+  REFUNDED
+  SHIPPED
+  DELIVERED
+}
+
+enum ShippingStatus {
+  PREPARING
+  SENT
+  DELIVERED
+}
+
+enum Role {
+  CLIENT
+  ADMIN
+}
