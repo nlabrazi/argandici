@@ -1,25 +1,14 @@
 -- CreateEnum
-CREATE TYPE "OrderStatus" AS ENUM ('PENDING', 'PAID', 'CANCELLED', 'REFUNDED', 'SHIPPED', 'DELIVERED');
-
--- CreateEnum
-CREATE TYPE "ShippingStatus" AS ENUM ('PREPARING', 'SENT', 'DELIVERED');
-
--- CreateEnum
 CREATE TYPE "Role" AS ENUM ('CLIENT', 'ADMIN');
 
--- CreateTable
-CREATE TABLE "Product" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "price" DOUBLE PRECISION NOT NULL,
-    "description" TEXT NOT NULL,
-    "image" TEXT NOT NULL,
-    "stock" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "category" TEXT NOT NULL,
+-- CreateEnum
+CREATE TYPE "OrderStatus" AS ENUM ('PENDING', 'PAID', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED');
 
-    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
-);
+-- CreateEnum
+CREATE TYPE "ShippingProvider" AS ENUM ('COLISSIMO', 'MONDIAL_RELAY', 'LA_POSTE', 'CHRONOPOST');
+
+-- CreateEnum
+CREATE TYPE "ShippingStatus" AS ENUM ('PREPARING', 'SHIPPED', 'IN_TRANSIT', 'DELIVERED', 'CANCELLED');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -33,6 +22,20 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "Product" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+    "description" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
+    "category" TEXT NOT NULL,
+    "stock" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Order" (
     "id" TEXT NOT NULL,
     "total" DOUBLE PRECISION NOT NULL,
@@ -40,15 +43,15 @@ CREATE TABLE "Order" (
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" TEXT,
     "email" TEXT,
-    "shippingProvider" TEXT,
+    "shippingProvider" "ShippingProvider",
     "shippingStatus" "ShippingStatus" NOT NULL DEFAULT 'PREPARING',
     "trackingNumber" TEXT,
     "addressLine1" TEXT,
     "addressLine2" TEXT,
     "city" TEXT,
+    "postalCode" TEXT,
     "country" TEXT,
     "fullName" TEXT,
-    "postalCode" TEXT,
 
     CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
 );
