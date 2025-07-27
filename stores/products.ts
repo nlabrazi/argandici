@@ -1,11 +1,5 @@
 import { defineStore } from 'pinia'
 
-// On importe les images (à adapter si tu ajoutes de nouvelles références)
-import bottleAsset from '@/assets/images/bottle_asset.png'
-import arganAlimentaire from '@/assets/images/argan-alimentaire.png'
-import bottleEucalyptus from '@/assets/images/bottle_asset_eucalyptus.png'
-import bottleRose from '@/assets/images/bottle_asset_rose.png'
-
 export interface Product {
   id: string
   name: string
@@ -26,7 +20,7 @@ export const useProductsStore = defineStore('products', {
   }),
   actions: {
     async fetchProducts() {
-      // Chargement simulé (mock), tu mettras ici ton appel API si besoin
+      // Chargement simulé (mock) — tu mettras ici ton appel API si besoin
       if (this.products.length) return
 
       this.products = [
@@ -36,8 +30,8 @@ export const useProductsStore = defineStore('products', {
           description: "Huile pure pour soins visage, corps et cheveux.",
           price: 24,
           category: 'Cosmétique',
-          image: bottleAsset,
-          images: [bottleAsset],
+          image: 'https://res.cloudinary.com/ds9jvhokr/image/upload/v1753480852/bottle_asset_nature.png',
+          images: ['https://res.cloudinary.com/ds9jvhokr/image/upload/v1753480852/bottle_asset_nature.png'],
           stock: 5,
           details: "Bouteille en verre 100ml. Issue de l’agriculture biologique. Pressée à froid.",
           benefits: ["Hydratation intense", "Nourrit la peau", "Protège les cheveux"],
@@ -49,8 +43,8 @@ export const useProductsStore = defineStore('products', {
           description: "Idéale pour la cuisine, goût subtil de noisette.",
           price: 19,
           category: 'Alimentaire',
-          image: arganAlimentaire,
-          images: [arganAlimentaire],
+          image: 'https://res.cloudinary.com/ds9jvhokr/image/upload/v1753480852/argan-alimentaire.png',
+          images: ['https://res.cloudinary.com/ds9jvhokr/image/upload/v1753480852/argan-alimentaire.png'],
           stock: 0,
           details: "Flacon 250ml. Goût typique, pression à froid.",
           benefits: ["Riche en antioxydants", "Favorise la digestion"],
@@ -62,8 +56,8 @@ export const useProductsStore = defineStore('products', {
           description: "Huile enrichie en eucalyptus pour massage.",
           price: 26,
           category: 'Soins',
-          image: bottleEucalyptus,
-          images: [bottleEucalyptus],
+          image: 'https://res.cloudinary.com/ds9jvhokr/image/upload/v1753481213/bottle_asset_eucalyptus.png',
+          images: ['https://res.cloudinary.com/ds9jvhokr/image/upload/v1753481213/bottle_asset_eucalyptus.png'],
           stock: 12,
           details: "Flacon 100ml. Association argan + eucalyptus.",
           benefits: ["Effet relaxant", "Sensation de fraîcheur"],
@@ -75,8 +69,8 @@ export const useProductsStore = defineStore('products', {
           description: "Huile enrichie en rose pour massage.",
           price: 26,
           category: 'Soins',
-          image: bottleRose,
-          images: [bottleRose],
+          image: 'https://res.cloudinary.com/ds9jvhokr/image/upload/v1753404213/bottle_asset_rose.png',
+          images: ['https://res.cloudinary.com/ds9jvhokr/image/upload/v1753404213/bottle_asset_rose.png'],
           stock: 12,
           details: "Flacon 100ml. Association argan + rose.",
           benefits: ["Effet relaxant", "Sensation de fraîcheur"],

@@ -29,7 +29,7 @@
       <NuxtLink v-for="product in filteredProducts" :key="product.id" :to="`/products/${product.id}`"
         class="bg-white rounded-2xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] cursor-pointer group">
         <div class="relative">
-          <img :src="product.image" :alt="product.name" class="w-full h-64 object-cover" />
+          <NuxtImg :src="product.image" :alt="product.name" class="w-full h-64 object-cover" provider="cloudinary" />
           <div v-if="product.stock === 0"
             class="absolute top-4 right-4 bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
             Rupture de stock

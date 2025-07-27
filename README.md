@@ -40,7 +40,7 @@
 
 <p align="center">
   <a href="https://argandici.com">
-    <img src="assets/images/screenshot.png" alt="Screenshot" width="100%" height="400" />
+    <img src="https://res.cloudinary.com/ds9jvhokr/image/upload/v1753404213/screenshot.png" alt="Screenshot" width="100%" height="400" />
   </a>
 </p>
 

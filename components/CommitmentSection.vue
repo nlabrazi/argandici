@@ -11,8 +11,9 @@
             l'environnement et au bien-être des communautés
           </p>
           <div class="flex items-center space-x-4">
-            <img src="@/assets/images/logo_usda-organic.png" alt="Certification commerce équitable" class="h-16 w-auto">
-            <img src="@/assets/images/logo_ecocert.svg" alt="Certification biologique" class="h-16 w-auto">
+            <NuxtImg src="logo_usda-organic.png" alt="Certification commerce équitable" class="h-16 w-auto" height="64"
+              provider="cloudinary" />
+            <NuxtImg src="logo_ecocert.svg" alt="Certification biologique" class="h-16 w-auto" provider="cloudinary" />
           </div>
         </div>
         <div class="md:w-1/2 md:pl-16">
@@ -22,7 +23,8 @@
               des hommes et de la nature"
             </blockquote>
             <div class="flex items-center">
-              <img src="@/assets/images/avatar_f.png" alt="Fatima Zahra" class="w-12 h-12 rounded-full mr-4">
+              <NuxtImg src="avatar_f.png" alt="Fatima Zahra" class="w-12 h-12 rounded-full mr-4"
+                provider="cloudinary" />
               <div>
                 <p class="font-semibold">Fatima Zahra</p>
                 <p class="text-argan-light">Fondatrice de la coopérative partenaire</p>

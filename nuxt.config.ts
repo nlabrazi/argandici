@@ -7,7 +7,11 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-
+  image: {
+    cloudinary: {
+      baseURL: 'https://res.cloudinary.com/ds9jvhokr/image/upload/'
+    }
+  },
   modules: [
     '@pinia/nuxt',
     '@nuxt/fonts',

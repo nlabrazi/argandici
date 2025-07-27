@@ -6,23 +6,25 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Démarrage du script de seed...')
 
-  console.log('🧹 Nettoyage des données existantes...')
-  await prisma.orderItem.deleteMany({})
-  console.log('   🗑️ OrderItems supprimés.')
-  await prisma.order.deleteMany({})
-  console.log('   🗑️ Orders supprimées.')
-  await prisma.product.deleteMany({})
-  console.log('   🗑️ Products supprimés.')
-  await prisma.user.deleteMany({})
-  console.log('   🗑️ Users supprimés.')
-  console.log('✅ Nettoyage terminé.')
+  // Nettoyage
+  console.log('🧹 Nettoyage des données existantes...');
+  await prisma.orderItem.deleteMany({});
+  console.log('   🗑️ OrderItems supprimés.');
+  await prisma.order.deleteMany({});
+  console.log('   🗑️ Orders supprimées.');
+  await prisma.product.deleteMany({});
+  console.log('   🗑️ Products supprimés.');
+  await prisma.user.deleteMany({});
+  console.log('   🗑️ Users supprimés.');
+  console.log('✅ Nettoyage terminé.');
 
-  console.log('🔑 Hachage des mots de passe...')
-  const adminPass = await bcrypt.hash('adminpass', 10)
-  const clientPass = await bcrypt.hash('clientpass', 10)
-  console.log('✅ Mots de passe hachés.')
+  // Utilisateurs
+  console.log('🔑 Hachage des mots de passe...');
+  const adminPass = await bcrypt.hash('adminpass', 10);
+  const clientPass = await bcrypt.hash('clientpass', 10);
+  console.log('✅ Mots de passe hachés.');
 
-  console.log('👤 Création de l\'utilisateur Admin...')
+  console.log('👤 Création de l\'utilisateur Admin...');
   const admin = await prisma.user.create({
     data: {
       email: 'admin@argandici.com',
@@ -30,9 +32,9 @@ async function main() {
       role: Role.ADMIN,
     },
   })
-  console.log(`✅ Utilisateur Admin créé : ${admin.email} (ID: ${admin.id})`)
+  console.log(`✅ Utilisateur Admin créé : ${admin.email} (ID: ${admin.id})`);
 
-  console.log("👤 Création de l'utilisateur Client...")
+  console.log("👤 Création de l'utilisateur Client...");
   const client = await prisma.user.create({
     data: {
       email: 'client@argandici.com',
@@ -40,39 +42,40 @@ async function main() {
       role: Role.CLIENT,
     },
   })
-  console.log(`✅ Utilisateur Client créé : ${client.email} (ID: ${client.id})`)
+  console.log(`✅ Utilisateur Client créé : ${client.email} (ID: ${client.id})`);
 
-  console.log('📦 Création des produits...')
+  // Produits
+  console.log('📦 Création des produits...');
   const productsData = [
     {
       name: "Huile d'argan pure 100ml",
       price: 19.99,
       description: "Huile d'argan 100% pure, pressée à froid.",
-      image: '/assets/images/bottle_asset.png',
+      image: 'https://res.cloudinary.com/ds9jvhokr/image/upload/v1753480852/bottle_asset_nature.png',
       category: 'Cosmétique',
       stock: 50,
     },
     {
-      name: "Huile d'argan cosmétique 250ml",
+      name: "Huile d'argan aux huiles essentielles de Rose de Damas 100ml",
       price: 34.9,
-      description: 'Parfaite pour les soins de la peau et des cheveux.',
-      image: '/assets/images/bottle_asset.png',
+      description: "Pour une peau douce et parfumée.",
+      image: 'https://res.cloudinary.com/ds9jvhokr/image/upload/v1753404213/bottle_asset_rose.png',
       category: 'Cosmétique',
       stock: 30,
     },
     {
-      name: 'Pack découverte 3x50ml',
+      name: "Huile d'argan aux huiles essentielles d'eucalyptus 100ml",
       price: 29.9,
-      description: 'Idéal pour offrir ou tester.',
-      image: '/assets/images/bottle_asset.png',
+      description: "Pour une sensation de fraîcheur et de bien-être.",
+      image: 'https://res.cloudinary.com/ds9jvhokr/image/upload/v1753481213/bottle_asset_eucalyptus.png',
       category: 'Cosmétique',
       stock: 20,
     },
     {
-      name: "Savon à l'huile d'argan",
+      name: "Crème hydratant visage et cheveux à l'huile d'argan 50ml",
       price: 8.5,
-      description: "Savon naturel enrichi à l'huile d'argan.",
-      image: '/assets/images/bottle_asset.png',
+      description: "Crème hydratante nourrissante pour le visage et les cheveux.",
+      image: 'https://res.cloudinary.com/ds9jvhokr/image/upload/v1753405280/creme_visage.png',
       category: 'Cosmétique',
       stock: 40,
     },
@@ -88,7 +91,7 @@ main()
     process.exit(1)
   })
   .finally(async () => {
-    console.log('🔌 Déconnexion de Prisma...')
-    await prisma.$disconnect()
-    console.log('✅ Déconnexion Prisma effectuée.')
+    console.log('🔌 Déconnexion de Prisma...');
+    await prisma.$disconnect();
+    console.log('✅ Déconnexion Prisma effectuée.');
   })

@@ -39,8 +39,8 @@
 
       <div class="order-1 lg:order-2 flex items-center">
         <div class="bg-argan-light rounded-2xl p-8 h-full w-full">
-          <img src="@/assets/images/asset_2.jpg" alt="Illustration huile d'argan"
-            class="w-full h-full object-cover rounded-xl">
+          <NuxtImg src="asset_2.jpg" alt="Illustration huile d'argan" class="w-full h-full object-cover rounded-xl"
+            provider="cloudinary" />
         </div>
       </div>
     </div>

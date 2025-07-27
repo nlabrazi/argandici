@@ -1,6 +1,8 @@
 <template>
   <section class="relative h-[80vh] bg-gray-200">
-    <div class="absolute inset-0 bg-[url('@/assets/images/hero3.jpg')] bg-cover bg-center">
+    <div class="absolute inset-0">
+      <NuxtImg src="hero3.jpg" alt="Huile d'argan maroc" class="w-full h-full object-cover" provider="cloudinary"
+        style="position: absolute; inset: 0;" aria-hidden="true" draggable="false" />
       <div class="absolute inset-0 bg-black/40"></div>
     </div>
 

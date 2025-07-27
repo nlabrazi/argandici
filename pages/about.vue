@@ -2,8 +2,11 @@
   <section class="max-w-7xl mx-auto py-16 px-4 md:px-8">
     <!-- Hero Section -->
     <div class="relative bg-gray-200 rounded-3xl overflow-hidden mb-24 h-[60vh] min-h-[400px]">
-      <div class="absolute inset-0 bg-[url('@/assets/images/argan-team.jpg')] bg-cover bg-center"></div>
-      <div class="absolute inset-0 bg-black/30"></div>
+      <div class="absolute inset-0">
+        <NuxtImg src="argan-team.jpg" alt="Équipe Argan d'ici" class="w-full h-full object-cover" provider="cloudinary"
+          aria-hidden="true" draggable="false" />
+        <div class="absolute inset-0 bg-black/30"></div>
+      </div>
       <div class="relative h-full flex flex-col justify-center items-center text-center px-4">
         <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-6">
           Notre histoire
@@ -18,8 +21,8 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24">
       <div>
         <div class="bg-argan-light rounded-3xl p-8 h-full">
-          <img src="@/assets/images/essaouira.jpg" alt="Essaouira, Maroc"
-            class="w-full h-full object-cover rounded-2xl" />
+          <NuxtImg src="essaouira.jpg" alt="Essaouira, Maroc" class="w-full h-full object-cover rounded-2xl"
+            provider="cloudinary" />
         </div>
       </div>
 
@@ -93,7 +96,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <div class="text-center">
           <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
-            <img src="@/assets/images/avatar_h.png" alt="Avatar Homme" class="object-cover w-full h-full" />
+            <NuxtImg src="avatar_h.png" alt="Avatar Homme" class="object-cover w-full h-full" provider="cloudinary" />
           </div>
           <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
           <p class="text-argan-gold mb-2">Fondateur & Relation Producteurs</p>
@@ -103,7 +106,7 @@
         </div>
         <div class="text-center">
           <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
-            <img src="@/assets/images/avatar_h.png" alt="Avatar Homme" class="object-cover w-full h-full" />
+            <NuxtImg src="avatar_h.png" alt="Avatar Homme" class="object-cover w-full h-full" provider="cloudinary" />
           </div>
           <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
           <p class="text-argan-gold mb-2">Responsable Qualité</p>
@@ -113,7 +116,7 @@
         </div>
         <div class="text-center">
           <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
-            <img src="@/assets/images/avatar_f.png" alt="Avatar Femme" class="object-cover w-full h-full" />
+            <NuxtImg src="avatar_f.png" alt="Avatar Femme" class="object-cover w-full h-full" provider="cloudinary" />
           </div>
           <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
           <p class="text-argan-gold mb-2">Cheffe de Production</p>
@@ -123,7 +126,7 @@
         </div>
         <div class="text-center">
           <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
-            <img src="@/assets/images/avatar_f.png" alt="Avatar Femme" class="object-cover w-full h-full" />
+            <NuxtImg src="avatar_f.png" alt="Avatar Femme" class="object-cover w-full h-full" provider="cloudinary" />
           </div>
           <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
           <p class="text-argan-gold mb-2">Service Client</p>
@@ -149,7 +152,3 @@
     </div>
   </section>
 </template>
-
-<script setup lang="ts">
-// (Optionnel: tu peux remplacer les "Name" par tes vrais prénoms ou dynamiquement)
-</script>

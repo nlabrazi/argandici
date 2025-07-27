@@ -20,12 +20,12 @@
       <!-- Galerie d'images -->
       <div>
         <div class="bg-argan-light rounded-2xl p-8 mb-6">
-          <img :src="selectedImage" :alt="product.name" class="w-full h-96 object-contain" />
+          <NuxtImg :src="selectedImage" :alt="product.name" class="w-full h-96 object-contain" provider="cloudinary" />
         </div>
         <div class="flex gap-4" v-if="product.images && product.images.length > 1">
           <div v-for="img in product.images" :key="img" class="cursor-pointer border-2 rounded-lg overflow-hidden"
             :class="{ 'border-argan-gold': selectedImage === img }" @click="selectedImage = img">
-            <img :src="img" alt="Miniature" class="w-16 h-16 object-cover" />
+            <NuxtImg :src="img" alt="Miniature" class="w-16 h-16 object-cover" provider="cloudinary" />
           </div>
         </div>
       </div>

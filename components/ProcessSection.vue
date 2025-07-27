@@ -3,8 +3,8 @@
     <div class="container mx-auto px-4">
       <div class="flex flex-col md:flex-row items-center">
         <div class="md:w-1/2 mb-12 md:mb-0">
-          <img src="@/assets/images/hero4.jpg" alt="Processus de production de l'huile d'argan"
-            class="w-full h-auto rounded-xl shadow-lg" />
+          <NuxtImg src="hero4.jpg" alt="Processus de production de l'huile d'argan"
+            class="w-full h-auto rounded-xl shadow-lg" provider="cloudinary" />
         </div>
         <div class="md:w-1/2 md:pl-16">
           <h2 class="font-serif text-3xl md:text-4xl mb-6">De l'arbre à votre flacon</h2>
