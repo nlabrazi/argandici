@@ -4,7 +4,9 @@ import { prisma } from '~/server/prisma/client'
 import { sendInvoiceEmail } from '~/server/utils/mailService'
 import { generateOrderInvoicePdf, uploadInvoiceToSupabase } from '~/server/utils/pdf'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-04-10' })
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: process.env.STRIPE_API_VERSION as any
+})
 
 export default defineEventHandler(async (event) => {
   const sig = event.node.req.headers['stripe-signature']
@@ -45,7 +47,7 @@ export default defineEventHandler(async (event) => {
     const order = await prisma.order.update({
       where: { id: orderId },
       data: { status: 'PAID' },
-      include: { items: { include: { product: true } } }
+      include: { orderItems: { include: { product: true } } }
     })
     console.log(`[Stripe Webhook] Order ${orderId} set to PAID`)
 
@@ -64,7 +66,7 @@ export default defineEventHandler(async (event) => {
 
     // d. Email facture (client + compta)
     const recipients = [order.email, 'compta@argandici.com'].filter(Boolean)
-    for (const to of recipients) {
+    for (const to of recipients.filter((x): x is string => typeof x === 'string')) {
       await sendInvoiceEmail({
         to,
         orderId,

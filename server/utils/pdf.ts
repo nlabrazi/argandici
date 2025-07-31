@@ -6,7 +6,7 @@ export async function generateOrderInvoicePdf(order: any): Promise<Buffer> {
     const doc = new PDFDocument({ size: 'A4', margin: 40 })
     const chunks: Buffer[] = []
 
-    doc.on('data', chunk => chunks.push(chunk))
+    doc.on('data', (chunk: Buffer) => chunks.push(chunk))
     doc.on('error', reject)
     doc.on('end', () => resolve(Buffer.concat(chunks)))
 
