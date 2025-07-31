@@ -1,3 +1,4 @@
+// server/api/payments/checkout.post.ts
 import Stripe from 'stripe'
 import { defineEventHandler, readBody } from 'h3'
 

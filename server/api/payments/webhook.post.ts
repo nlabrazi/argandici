@@ -1,17 +1,17 @@
-// server/api/payments/webhook.post.ts
 import Stripe from 'stripe'
-import { useRawBody, createError } from 'h3'
-import { prisma } from '~/server/utils/prisma' // à adapter selon ton projet
-import { sendMailgunMail } from '~/server/utils/mailgun' // à adapter à ton mailer
-import { generateOrderInvoicePdf, uploadInvoiceToSupabase } from '~/server/utils/pdf' // à adapter
+import { readRawBody, createError } from 'h3'
+import { prisma } from '~/server/prisma/client'
+import { sendInvoiceEmail } from '~/server/utils/mailService'
+import { generateOrderInvoicePdf, uploadInvoiceToSupabase } from '~/server/utils/pdf'
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-04-10' })
 
 export default defineEventHandler(async (event) => {
   const sig = event.node.req.headers['stripe-signature']
-  const rawBody = await useRawBody(event)
+  const rawBody = await readRawBody(event)
   let stripeEvent
 
-  // 1. Vérification de la signature
+  // 1. Vérification de la signature Stripe
   try {
     stripeEvent = stripe.webhooks.constructEvent(
       rawBody!,
@@ -23,11 +23,11 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: `Webhook Error: ${err.message}` })
   }
 
-  // 2. Réponse rapide à Stripe
+  // 2. Réponse immédiate à Stripe
   event.node.res.statusCode = 200
   event.node.res.end(JSON.stringify({ received: true }))
 
-  // 3. On ne traite que checkout.session.completed
+  // 3. On ne traite QUE les paiements réussis
   if (stripeEvent.type !== 'checkout.session.completed') {
     console.log(`[Stripe Webhook] Ignored event type: ${stripeEvent.type}`)
     return
@@ -40,8 +40,6 @@ export default defineEventHandler(async (event) => {
     return
   }
 
-  console.log(`[Stripe Webhook] Processing payment for orderId: ${orderId}`)
-
   try {
     // a. Passage commande en "PAID"
     const order = await prisma.order.update({
@@ -51,27 +49,30 @@ export default defineEventHandler(async (event) => {
     })
     console.log(`[Stripe Webhook] Order ${orderId} set to PAID`)
 
-    // b. Génération du PDF de facture
+    // b. Générer la facture PDF
     const pdfBuffer = await generateOrderInvoicePdf(order)
     console.log(`[Stripe Webhook] PDF generated for order ${orderId}`)
 
-    // c. Upload du PDF (Supabase, S3, etc)
-    const pdfUrl = await uploadInvoiceToSupabase(orderId, pdfBuffer)
-    console.log(`[Stripe Webhook] PDF uploaded: ${pdfUrl}`)
+    // c. Uploader sur Supabase (optionnel)
+    let pdfUrl: string | undefined
+    try {
+      pdfUrl = await uploadInvoiceToSupabase(orderId, pdfBuffer)
+      console.log(`[Stripe Webhook] PDF uploaded: ${pdfUrl}`)
+    } catch (err) {
+      console.warn(`[Stripe Webhook] ⚠️ Upload PDF failed, fallback to attach only.`)
+    }
 
-    // d. Envoi email (Mailgun)
+    // d. Email facture (client + compta)
     const recipients = [order.email, 'compta@argandici.com'].filter(Boolean)
     for (const to of recipients) {
-      await sendMailgunMail({
+      await sendInvoiceEmail({
         to,
-        subject: `Votre facture Argan d'ici - Commande ${orderId}`,
-        text: `Merci pour votre commande ! Retrouvez votre facture ci-jointe.`,
-        html: `<p>Merci pour votre commande !<br/>Vous trouverez votre facture en pièce jointe.</p>`,
-        attachments: [{ filename: `facture-${orderId}.pdf`, content: pdfBuffer }]
+        orderId,
+        pdfBuffer,
+        pdfUrl,
       })
       console.log(`[Stripe Webhook] Email sent to ${to}`)
     }
-
   } catch (err: any) {
     console.error(`[Stripe Webhook] ERROR for order ${orderId}:`, err.message)
   }

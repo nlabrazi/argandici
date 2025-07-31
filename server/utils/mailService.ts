@@ -1,3 +1,4 @@
+// server/utils/mailService.ts
 import Mailgun from "mailgun.js";
 import formData from "form-data";
 
@@ -6,9 +7,7 @@ const domain = process.env.MAILGUN_DOMAIN;
 const fromEmail = process.env.MAILGUN_FROM ?? `postmaster@${domain}`;
 const contactRecipient = process.env.CONTACT_RECIPIENT ?? 'contact@argandici.com';
 
-if (!apiKey || !domain) {
-  throw new Error('MAILGUN_API_KEY or MAILGUN_DOMAIN is missing in env');
-}
+if (!apiKey || !domain) throw new Error('MAILGUN_API_KEY or MAILGUN_DOMAIN missing in env');
 
 const mailgun = new Mailgun(formData);
 const mgClient = mailgun.client({
@@ -16,9 +15,47 @@ const mgClient = mailgun.client({
   key: apiKey,
   url: "https://api.eu.mailgun.net",
 });
-
 const realDomain = domain as string;
 
+// ✅ Envoi email facture (PDF attaché, ou lien)
+export async function sendInvoiceEmail({
+  to,
+  orderId,
+  pdfBuffer,
+  pdfUrl,
+}: {
+  to: string;
+  orderId: string;
+  pdfBuffer?: Buffer;
+  pdfUrl?: string;
+}) {
+  const html = `
+    <p>Merci pour votre commande !</p>
+    <p>Votre facture est disponible ci-dessous.</p>
+    ${pdfUrl
+      ? `<p><a href="${pdfUrl}" target="_blank">Télécharger la facture</a></p>`
+      : ""
+    }
+  `;
+  const msg: any = {
+    from: `Argan d'ici <${fromEmail}>`,
+    to: [to],
+    subject: `Votre facture - Commande ${orderId}`,
+    html,
+  }
+  if (pdfBuffer) {
+    msg.attachment = [
+      {
+        filename: `facture-${orderId}.pdf`,
+        data: pdfBuffer,
+      },
+    ];
+  }
+  await mgClient.messages.create(realDomain, msg)
+  console.log(`📧 Facture envoyée à ${to}`);
+}
+
+// ✅ Envoi de notification de contact
 export async function sendContactNotification({
   name,
   email,
@@ -45,8 +82,10 @@ export async function sendContactNotification({
     subject: `[CONTACT] ${subject}`,
     html,
   });
+  console.log(`📧 Notification de contact envoyée à ${contactRecipient}`);
 }
 
+// ✅ Confirmation de contact à l'utilisateur
 export async function sendContactConfirmation({
   name,
   email,
@@ -81,4 +120,5 @@ export async function sendContactConfirmation({
     subject: `Confirmation de réception : ${subject}`,
     html,
   });
+  console.log(`📧 Confirmation de contact envoyée à ${email}`);
 }
