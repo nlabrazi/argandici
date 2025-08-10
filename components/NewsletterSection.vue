@@ -6,25 +6,12 @@
         <p class="text-gray-600 mb-8">
           Recevez nos conseils d'utilisation et offres exclusives
         </p>
-
         <form @submit.prevent="onSubmit" class="flex flex-col sm:flex-row gap-4">
-          <label class="sr-only" for="newsletter-email">Votre adresse email</label>
-          <input
-            id="newsletter-email"
-            type="email"
-            v-model="email"
-            placeholder="Votre adresse email"
-            class="flex-grow px-4 py-3 border border-argan-light rounded-lg
-                   focus:outline-none focus:ring-2 focus:ring-argan-gold"
-            required
-          />
-
-          <button
-            type="submit"
-            class="bg-argan-gold text-white px-6 py-3 rounded-lg
-                   motion-safe:transition-[background-color,color] duration-300
-                   hover:bg-argan-dark focus:outline-none focus:ring-2 focus:ring-argan-gold"
-          >
+          <input type="email" placeholder="Votre adresse email" v-model="email"
+            class="flex-grow px-4 py-3 border border-argan-light rounded-lg focus:outline-none focus:ring-2 focus:ring-argan-gold"
+            required>
+          <button type="submit"
+            class="bg-argan-gold hover:bg-argan-dark text-white px-6 py-3 rounded-lg transition duration-300">
             S'inscrire
           </button>
         </form>
@@ -36,10 +23,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 const email = ref('')
-
 function onSubmit() {
   if (email.value && email.value.includes('@')) {
-    // À brancher côté backend
     console.log('Email submitted:', email.value)
     email.value = ''
   }

@@ -8,8 +8,8 @@
   --color-argan-eucalyptus: #92A774;
 
   /* Polices */
-  --font-serif: "Playfair Display", serif;
-  --font-sans: Raleway, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-serif: "Times New Roman, Playfair Display", serif;
+  --font-sans: Arial, sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue";
 
   /* Spacing personnalisés (génère p-section, my-section, gap-faq-gap, etc.) */
   --spacing-section: 5rem;      /* my-section, py-section, etc. */
