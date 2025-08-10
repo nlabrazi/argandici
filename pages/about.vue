@@ -1,0 +1,154 @@
+<template>
+  <section class="max-w-7xl mx-auto py-16 px-4 md:px-8">
+    <!-- Hero Section -->
+    <div class="relative bg-gray-200 rounded-3xl overflow-hidden mb-24 h-[60vh] min-h-[400px]">
+      <div class="absolute inset-0">
+        <NuxtImg src="argan-team.jpg" alt="Équipe Argan d'ici" class="w-full h-full object-cover" provider="cloudinary"
+          aria-hidden="true" draggable="false" />
+        <div class="absolute inset-0 bg-black/30"></div>
+      </div>
+      <div class="relative h-full flex flex-col justify-center items-center text-center px-4">
+        <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-6">
+          Notre histoire
+        </h1>
+        <p class="max-w-3xl text-xl text-white/90">
+          Une aventure franco-marocaine au service de l'authenticité
+        </p>
+      </div>
+    </div>
+
+    <!-- Notre histoire -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24">
+      <div>
+        <div class="bg-argan-light rounded-3xl p-8 h-full">
+          <NuxtImg src="essaouira.jpg" alt="Essaouira, Maroc" class="w-full h-full object-cover rounded-2xl"
+            provider="cloudinary" />
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-serif text-3xl md:text-4xl text-argan-dark mb-6">
+          Une passion familiale
+        </h2>
+        <div class="space-y-4 text-gray-700">
+          <p>
+            Argan d'ici, c'est l'aventure d'une famille franco-marocaine passionnée par l'authenticité et la qualité.
+            Depuis Essaouira jusqu'en France, nous sélectionnons l'huile d'argan la plus pure auprès de petits
+            producteurs locaux.
+          </p>
+          <p>
+            Notre mission : <span class="font-bold text-argan-gold">faire découvrir le vrai goût et les bienfaits de
+              l'huile d'argan</span>,
+            dans le respect de la tradition et de l'artisanat marocain.
+          </p>
+          <p>
+            Toutes nos huiles sont <b>pressées à froid</b> et <b>testées en laboratoire</b>. Nous privilégions le
+            circuit court et la relation humaine avec nos clients.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nos engagements -->
+    <div class="mb-24">
+      <h2 class="font-serif text-3xl md:text-4xl text-argan-dark mb-12 text-center">
+        Nos engagements
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div
+          class="bg-white rounded-2xl p-6 shadow-sm border border-argan-light transition-transform hover:scale-[1.02] text-center">
+          <div class="text-argan-gold text-4xl mb-4">
+            <i class="fas fa-hands-holding-circle"></i>
+          </div>
+          <h3 class="font-serif text-xl text-argan-dark mb-3">Artisanat respectueux</h3>
+          <p class="text-gray-600">
+            Travail direct avec les coopératives marocaines pour un revenu équitable et des pratiques durables.
+          </p>
+        </div>
+        <div
+          class="bg-white rounded-2xl p-6 shadow-sm border border-argan-light transition-transform hover:scale-[1.02] text-center">
+          <div class="text-argan-gold text-4xl mb-4">
+            <i class="fas fa-flask"></i>
+          </div>
+          <h3 class="font-serif text-xl text-argan-dark mb-3">Qualité certifiée</h3>
+          <p class="text-gray-600">
+            Contrôle qualité rigoureux et analyses en laboratoire pour garantir une huile 100% pure.
+          </p>
+        </div>
+        <div
+          class="bg-white rounded-2xl p-6 shadow-sm border border-argan-light transition-transform hover:scale-[1.02] text-center">
+          <div class="text-argan-gold text-4xl mb-4">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h3 class="font-serif text-xl text-argan-dark mb-3">Tradition préservée</h3>
+          <p class="text-gray-600">
+            Méthodes ancestrales de production pour préserver les bienfaits et le goût authentique.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notre équipe -->
+    <div class="mb-32">
+      <h2 class="font-serif text-3xl md:text-4xl text-argan-dark mb-12 text-center">
+        L'équipe Argan d'ici
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
+            <NuxtImg src="avatar_h.png" alt="Avatar Homme" class="object-cover w-full h-full" provider="cloudinary" />
+          </div>
+          <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
+          <p class="text-argan-gold mb-2">Fondateur & Relation Producteurs</p>
+          <p class="text-gray-600 text-sm">
+            Originaire d'Essaouira, il sélectionne personnellement chaque lot d'huile.
+          </p>
+        </div>
+        <div class="text-center">
+          <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
+            <NuxtImg src="avatar_h.png" alt="Avatar Homme" class="object-cover w-full h-full" provider="cloudinary" />
+          </div>
+          <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
+          <p class="text-argan-gold mb-2">Responsable Qualité</p>
+          <p class="text-gray-600 text-sm">
+            Garantit la pureté et l'excellence de chaque flacon avant expédition.
+          </p>
+        </div>
+        <div class="text-center">
+          <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
+            <NuxtImg src="avatar_f.png" alt="Avatar Femme" class="object-cover w-full h-full" provider="cloudinary" />
+          </div>
+          <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
+          <p class="text-argan-gold mb-2">Cheffe de Production</p>
+          <p class="text-gray-600 text-sm">
+            Supervise l'extraction et le conditionnement dans le respect des traditions.
+          </p>
+        </div>
+        <div class="text-center">
+          <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
+            <NuxtImg src="avatar_f.png" alt="Avatar Femme" class="object-cover w-full h-full" provider="cloudinary" />
+          </div>
+          <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
+          <p class="text-argan-gold mb-2">Service Client</p>
+          <p class="text-gray-600 text-sm">
+            Votre interlocuteur privilégié pour toutes vos questions.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Citation -->
+    <div class="bg-argan-gold/10 rounded-3xl p-8 md:p-12 max-w-4xl mx-auto">
+      <blockquote class="font-serif text-2xl italic text-argan-dark text-center mb-6">
+        "Notre force vient de nos racines marocaines et de notre engagement français pour la qualité."
+      </blockquote>
+      <div class="flex items-center justify-center">
+        <div class="bg-gray-200 border-2 border-dashed rounded-full w-16 h-16 mr-4"></div>
+        <div>
+          <p class="font-semibold">Karim & Sophie, Fondateurs</p>
+          <p class="text-argan-dark/80">Argan d'ici</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>

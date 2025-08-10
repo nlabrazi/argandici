@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(CLIENT)
+  createdAt DateTime @default(now())
+  orders    Order[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  price       Float
+  description String
+  image       String
+  category    String
+  stock       Int
+  createdAt   DateTime @default(now())
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id              String         @id @default(uuid())
+  total           Float
+  status          OrderStatus    @default(PENDING)
+  date            DateTime       @default(now())
+  userId          String?
+  user            User?          @relation(fields: [userId], references: [id])
+  email           String?
+  shippingProvider ShippingProvider?
+  shippingStatus  ShippingStatus @default(PREPARING)
+  trackingNumber  String?
+  addressLine1    String?
+  addressLine2    String?
+  city            String?
+  postalCode      String?
+  country         String?
+  fullName        String?
+  orderItems      OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+enum Role {
+  CLIENT
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum ShippingProvider {
+  COLISSIMO
+  MONDIAL_RELAY
+  LA_POSTE
+  CHRONOPOST
+}
+
+enum ShippingStatus {
+  PREPARING
+  SHIPPED
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}

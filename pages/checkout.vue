@@ -1,0 +1,161 @@
+<template>
+  <section class="max-w-3xl mx-auto py-12 px-4 md:px-8">
+    <h1 class="text-3xl font-serif text-argan-dark mb-8">Finaliser ma commande</h1>
+
+    <div v-if="cart.items.length === 0" class="text-center py-16">
+      <p class="text-xl text-gray-600">Votre panier est vide.</p>
+      <NuxtLink to="/products"
+        class="inline-block mt-4 bg-argan-gold hover:bg-argan-dark text-white px-6 py-3 rounded-full transition">
+        Retourner aux produits
+      </NuxtLink>
+    </div>
+
+    <div v-else>
+      <form @submit.prevent="submitOrder" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Nom complet</label>
+            <input v-model="form.fullName" type="text" required
+              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Email</label>
+            <input v-model="form.email" type="email" required
+              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Adresse ligne 1</label>
+          <input v-model="form.addressLine1" type="text" required
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Adresse ligne 2 (facultatif)</label>
+          <input v-model="form.addressLine2" type="text"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Ville</label>
+            <input v-model="form.city" type="text" required
+              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Code postal</label>
+            <input v-model="form.postalCode" type="text" required
+              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Pays</label>
+            <input v-model="form.country" type="text" required
+              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 pt-6">
+          <h2 class="text-2xl font-serif text-argan-dark mb-4">Récapitulatif de votre panier</h2>
+          <div v-for="item in cart.items" :key="item.productId" class="flex justify-between items-center py-2 border-b">
+            <div class="flex items-center gap-4">
+              <NuxtImg :src="item.image" :alt="item.name" class="w-12 h-12 object-cover rounded-lg" />
+              <span class="text-gray-800">{{ item.name }} x {{ item.quantity }}</span>
+            </div>
+            <span class="text-gray-700">{{ formatPrice(item.price * item.quantity) }}</span>
+          </div>
+          <div class="flex justify-between items-center mt-4">
+            <span class="font-medium text-xl">Total</span>
+            <span class="text-xl font-bold">{{ formatPrice(cart.total) }}</span>
+          </div>
+        </div>
+
+        <div v-if="errorMessage" class="text-red-600 mb-2">{{ errorMessage }}</div>
+
+        <button type="submit" :disabled="isLoading"
+          class="bg-argan-gold hover:bg-argan-dark text-white px-6 py-3 rounded-full transition w-full disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ isLoading ? 'Validation...' : 'Payer ma commande' }}
+        </button>
+      </form>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useCartStore } from '~/stores/cart'
+import { useNotificationStore } from '~/stores/notifications'
+
+const cart = useCartStore()
+const notifications = useNotificationStore()
+
+const form = ref({
+  fullName: '',
+  addressLine1: '',
+  addressLine2: '',
+  city: '',
+  postalCode: '',
+  country: '',
+  email: ''
+})
+
+const isLoading = ref(false)
+const errorMessage = ref('')
+
+function formatPrice(price: number) {
+  return price.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })
+}
+
+async function submitOrder() {
+  isLoading.value = true
+  errorMessage.value = ''
+
+  // 1. Création de la commande
+  const orderRes = await $fetch('/api/orders', {
+    method: 'POST',
+    body: {
+      items: cart.items.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      ...form.value,
+    }
+  }).catch(err => {
+    isLoading.value = false
+    errorMessage.value = 'Erreur lors de la création de la commande'
+    return null
+  })
+
+  if (!orderRes?.order?.id) {
+    errorMessage.value = 'Création de commande impossible'
+    isLoading.value = false
+    return
+  }
+
+  // 2. Création session Stripe Checkout
+  const stripeRes = await $fetch('/api/payments/checkout', {
+    method: 'POST',
+    body: {
+      cart: cart.items.map(item => ({
+        id: item.productId,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+      email: form.value.email,
+      orderId: orderRes.order.id,
+    }
+  }).catch(err => {
+    isLoading.value = false
+    errorMessage.value = 'Erreur lors de la création du paiement Stripe'
+    return null
+  })
+
+  if (!stripeRes?.url) {
+    errorMessage.value = 'Impossible de créer la session de paiement'
+    isLoading.value = false
+    return
+  }
+
+  // 3. Redirection vers Stripe
+  window.location.href = stripeRes.url
+}
+</script>

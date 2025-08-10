@@ -2,7 +2,7 @@
   <nav class="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between sticky top-0 z-50">
     <!-- Logo -->
     <NuxtLink to="/" class="flex items-center gap-2 cursor-pointer hover:underline hover:text-argan-gold">
-      <img src="@/assets/images/logo.png" alt="Logo" class="h-8 w-8 rounded-full" />
+      <NuxtImg src="logo.png" alt="Logo" class="h-8 w-8 rounded-full" provider="cloudinary" />
       <span class="text-xl font-bold text-primary">Argan d'ici</span>
     </NuxtLink>
     <!-- Desktop menu -->
@@ -64,13 +64,10 @@
 
 <script setup lang="ts">
 // Pour le compteur du panier
-import { computed, ref } from "vue"
-// À remplacer par Pinia ou un composable global + API panier plus tard
+import { ref } from "vue"
 const menuOpen = ref(false)
 function toggleMenu() { menuOpen.value = !menuOpen.value }
 function closeMenu() { menuOpen.value = false }
-
-// Ex : panier via Pinia ou provide/inject (ici, dummy)
-// Remplacer par ton vrai store panier si tu en as déjà un
-const cartCount = ref(0) // à remplacer !
+// À remplacer par ton vrai store panier !
+const cartCount = ref(0)
 </script>

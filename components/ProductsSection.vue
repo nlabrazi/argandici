@@ -9,14 +9,14 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div v-for="product in products" :key="product.name"
+        <div v-for="product in products" :key="product.id"
           class="border border-argan-light rounded-xl overflow-hidden transition-transform hover:scale-[1.02]">
-          <img :src="product.image" :alt="product.name" class="w-full h-64 object-cover" />
+          <NuxtImg :src="product.image" :alt="product.name" class="w-full h-64 object-cover" />
           <div class="p-6">
             <h3 class="font-serif text-xl mb-2">{{ product.name }}</h3>
             <p class="text-gray-600 mb-4">{{ product.description }}</p>
             <div class="flex justify-between items-center">
-              <span class="font-semibold text-argan-gold">{{ product.price }}</span>
+              <span class="font-semibold text-argan-gold">{{ product.price }} €</span>
               <button class="text-argan-gold hover:text-argan-dark flex items-center">
                 Découvrir
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24"
@@ -40,24 +40,5 @@
 </template>
 
 <script setup lang="ts">
-const products = [
-  {
-    name: "Argan Cosmétique",
-    description: "Pour une peau nourrie et des cheveux revitalisés",
-    price: "À partir de 24€",
-    image: "/images/asset_1.jpg"
-  },
-  {
-    name: "Argan Culinaire",
-    description: "L'huile gourmande aux notes de noisette",
-    price: "À partir de 28€",
-    image: "/images/asset_2.jpg"
-  },
-  {
-    name: "Collection Prestige",
-    description: "L'huile d'argan la plus rare et la plus pure",
-    price: "À partir de 42€",
-    image: "/images/asset_3.jpg"
-  }
-]
+const { data: products } = await useFetch('/api/products')
 </script>

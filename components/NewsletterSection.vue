@@ -25,7 +25,6 @@ import { ref } from 'vue'
 const email = ref('')
 function onSubmit() {
   if (email.value && email.value.includes('@')) {
-    // À brancher sur ton backend plus tard
     console.log('Email submitted:', email.value)
     email.value = ''
   }
