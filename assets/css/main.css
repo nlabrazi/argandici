@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+@theme {
+  --color-argan-gold: #c9a145;
+  --color-argan-dark: #3c2f1d;
+  --color-argan-light: #f8f5e9;
+  --color-argan-rose: #9F0502;
+  --color-argan-eucalyptus: #92A774;
+
+  /* Polices */
+  --font-serif: "Playfair Display", serif;
+  --font-sans: Raleway, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+
+  /* Spacing personnalisés (génère p-section, my-section, gap-faq-gap, etc.) */
+  --spacing-section: 5rem;      /* my-section, py-section, etc. */
+  --spacing-section-lg: 8rem;   /* my-section-lg, etc. */
+  --spacing-faq-gap: 2.5rem;    /* gap-faq-gap, space-y-faq-gap, etc. */
+}

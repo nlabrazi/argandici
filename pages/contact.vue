@@ -45,7 +45,7 @@
             <FormError v-if="errors.message" :error="errors.message" />
           </div>
           <button type="submit" :disabled="loading"
-            class="w-full bg-argan-gold hover:bg-argan-dark text-gray font-medium py-3 px-6 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+            class="w-full bg-argan-gold hover:bg-argan-dark text-gray-800 font-medium py-3 px-6 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
             <span v-if="!loading">Envoyer le message</span>
             <span v-else>Envoi en cours...</span>
           </button>

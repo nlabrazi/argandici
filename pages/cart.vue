@@ -61,38 +61,35 @@
 <script setup lang="ts">
 import { useCartStore } from '~/stores/cart'
 import { useNotificationStore } from '~/stores/notifications'
+import { useRouter } from 'vue-router'
 
 const cart = useCartStore()
 const notifications = useNotificationStore()
+const router = useRouter()
 
 function formatPrice(price: number) {
   return price.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })
 }
-
 function increase(item: any) {
   cart.updateQuantity(item.productId, item.quantity + 1)
   notifications.showToast(`Quantité augmentée : ${item.name}`, 'info')
 }
-
 function decrease(item: any) {
   if (item.quantity > 1) {
     cart.updateQuantity(item.productId, item.quantity - 1)
     notifications.showToast(`Quantité diminuée : ${item.name}`, 'info')
   }
 }
-
 function remove(item: any) {
   cart.removeFromCart(item.productId)
   notifications.showToast(`${item.name} retiré du panier`, 'warning')
 }
-
 function clear() {
   cart.clearCart()
   notifications.showToast('Panier vidé', 'warning')
 }
-
 function checkout() {
-  notifications.showToast('Validation de la commande... (backend à brancher)', 'success', 4000)
-  // Ici tu intégreras le paiement ou la création de commande plus tard
+  notifications.showToast('Veuillez renseigner vos infos pour finaliser la commande.', 'info')
+  router.push('/checkout')
 }
 </script>
