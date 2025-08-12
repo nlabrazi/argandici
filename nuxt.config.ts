@@ -3,6 +3,13 @@ import { defineNuxtConfig } from "nuxt/config";
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-11',
   css: ['~/assets/css/main.css'],
+  nitro: {
+    preset: 'netlify',
+    externals: {
+      external: ['@prisma/client', 'prisma', '.prisma'],
+      inline: []
+    }
+  },
   postcss: {
     plugins: {
       '@tailwindcss/postcss': {},
