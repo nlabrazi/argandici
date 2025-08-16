@@ -17,23 +17,23 @@
             <p class="text-gray-600 mb-4">{{ product.description }}</p>
             <div class="flex justify-between items-center">
               <span class="font-semibold text-argan-gold">{{ product.price }} €</span>
-              <button class="text-argan-gold hover:text-argan-dark flex items-center">
+              <NuxtLink to="/products" class="text-argan-gold hover:text-argan-dark flex items-center">
                 Découvrir
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
-              </button>
+              </NuxtLink>
             </div>
           </div>
         </div>
       </div>
 
       <div class="text-center mt-12">
-        <button
+        <NuxtLink to="/products"
           class="border border-argan-gold text-argan-gold hover:bg-argan-gold hover:text-white px-8 py-3 rounded-full transition duration-300">
           Voir toute la gamme
-        </button>
+        </NuxtLink>
       </div>
     </div>
   </section>
