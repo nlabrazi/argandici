@@ -9,7 +9,7 @@
         <div class="md:w-1/2 md:pl-16">
           <h2 class="font-serif text-3xl md:text-4xl mb-6">De l'arbre à votre flacon</h2>
           <div class="space-y-8">
-            <div class="flex">
+            <div v-inview class="reveal reveal-right flex">
               <div class="flex-shrink-0 mr-4">
                 <span
                   class="w-10 h-10 rounded-full bg-argan-gold flex items-center justify-center text-white font-bold">1</span>
@@ -21,7 +21,7 @@
                 </p>
               </div>
             </div>
-            <div class="flex">
+            <div v-inview class="reveal reveal-right flex">
               <div class="flex-shrink-0 mr-4">
                 <span
                   class="w-10 h-10 rounded-full bg-argan-gold flex items-center justify-center text-white font-bold">2</span>
@@ -33,7 +33,7 @@
                 </p>
               </div>
             </div>
-            <div class="flex">
+            <div v-inview class="reveal reveal-right flex">
               <div class="flex-shrink-0 mr-4">
                 <span
                   class="w-10 h-10 rounded-full bg-argan-gold flex items-center justify-center text-white font-bold">3</span>

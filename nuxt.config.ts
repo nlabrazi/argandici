@@ -2,7 +2,7 @@ import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-11',
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', '~/assets/css/animations.css'],
   nitro: {
     preset: 'netlify',
     externals: {

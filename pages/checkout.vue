@@ -10,45 +10,59 @@
       </NuxtLink>
     </div>
 
-    <div v-else>
+    <div v-else v-inview class="reveal reveal-down">
       <form @submit.prevent="submitOrder" class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="block text-sm font-medium text-gray-700">Nom complet</label>
-            <input v-model="form.fullName" type="text" required
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+            <input v-model="form.fullName" type="text" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+       px-4 h-10 text-gray-900 placeholder-gray-400
+       caret-argan-gold focus:outline-none focus:ring-2
+       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Email</label>
-            <input v-model="form.email" type="email" required
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+            <input v-model="form.email" type="email" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+       px-4 h-10 text-gray-900 placeholder-gray-400
+       caret-argan-gold focus:outline-none focus:ring-2
+       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
           </div>
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700">Adresse ligne 1</label>
-          <input v-model="form.addressLine1" type="text" required
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+          <input v-model="form.addressLine1" type="text" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+       px-4 h-10 text-gray-900 placeholder-gray-400
+       caret-argan-gold focus:outline-none focus:ring-2
+       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700">Adresse ligne 2 (facultatif)</label>
-          <input v-model="form.addressLine2" type="text"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+          <input v-model="form.addressLine2" type="text" class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+       px-4 h-10 text-gray-900 placeholder-gray-400
+       caret-argan-gold focus:outline-none focus:ring-2
+       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label class="block text-sm font-medium text-gray-700">Ville</label>
-            <input v-model="form.city" type="text" required
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+            <input v-model="form.city" type="text" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+       px-4 h-10 text-gray-900 placeholder-gray-400
+       caret-argan-gold focus:outline-none focus:ring-2
+       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Code postal</label>
-            <input v-model="form.postalCode" type="text" required
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+            <input v-model="form.postalCode" type="text" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+       px-4 h-10 text-gray-900 placeholder-gray-400
+       caret-argan-gold focus:outline-none focus:ring-2
+       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Pays</label>
-            <input v-model="form.country" type="text" required
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-argan-gold focus:border-argan-gold" />
+            <input v-model="form.country" type="text" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+       px-4 h-10 text-gray-900 placeholder-gray-400
+       caret-argan-gold focus:outline-none focus:ring-2
+       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
           </div>
         </div>
 

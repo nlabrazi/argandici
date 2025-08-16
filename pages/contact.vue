@@ -13,7 +13,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
       <!-- Formulaire de contact -->
       <div class="bg-white rounded-2xl shadow-sm p-8">
-        <form @submit.prevent="onSubmit" class="space-y-6">
+        <form @submit.prevent="onSubmit" v-inview class="reveal reveal-right space-y-6">
           <div>
             <label for="name" class="block mb-2 text-sm font-medium text-argan-dark">Nom complet</label>
             <input type="text" id="name" v-model="form.name" :class="inputClass(errors.name)" placeholder="Votre nom"

@@ -19,7 +19,7 @@
     <div v-else-if="product" class="grid grid-cols-1 lg:grid-cols-2 gap-12">
       <!-- Galerie d'images -->
       <div>
-        <div class="bg-argan-light rounded-2xl p-8 mb-6">
+        <div v-inview class="reveal reveal-left bg-argan-light rounded-2xl p-8 mb-6">
           <NuxtImg :src="selectedImage" :alt="product.name" class="w-full h-96 object-contain" provider="cloudinary" />
         </div>
         <div class="flex gap-4" v-if="product.images && product.images.length > 1">
@@ -31,7 +31,7 @@
       </div>
 
       <!-- Détails produit + Add to cart -->
-      <div>
+      <div v-inview class="reveal reveal-right">
         <span class="bg-argan-gold text-white px-3 py-1 rounded-full text-sm">
           {{ product.category }}
         </span>

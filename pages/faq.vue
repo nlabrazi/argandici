@@ -14,14 +14,13 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
       <div class="order-2 lg:order-1">
         <div class="space-y-6">
-          <div v-for="(item, i) in faqList" :key="i"
-            class="border border-argan-light rounded-xl overflow-hidden shadow-sm transition-shadow hover:shadow-md">
+          <div v-for="(item, i) in faqList" :key="i" v-inview
+            class="reveal reveal-left border border-argan-light rounded-xl overflow-hidden shadow-sm transition-shadow hover:shadow-md">
             <button @click="toggle(i)"
               class="w-full flex justify-between items-center px-6 py-5 bg-white text-left hover:bg-argan-light/30 transition-colors focus:outline-none focus:ring-2 focus:ring-argan-gold"
               :aria-expanded="openIndex === i" :aria-controls="`faq-panel-${i}`">
               <span class="font-medium text-argan-dark text-lg">{{ item.question }}</span>
-              <span class="transform transition-transform text-argan-gold"
-                :class="{ 'rotate-180': openIndex === i }">
+              <span class="transform transition-transform text-argan-gold" :class="{ 'rotate-180': openIndex === i }">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd"
                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -29,8 +28,7 @@
                 </svg>
               </span>
             </button>
-            <div :id="`faq-panel-${i}`"
-              class="grid transition-[grid-template-rows,opacity] duration-300 ease-in-out"
+            <div :id="`faq-panel-${i}`" class="grid transition-[grid-template-rows,opacity] duration-300 ease-in-out"
               :class="openIndex === i ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'">
               <div class="overflow-hidden">
                 <div class="px-6 py-5 bg-argan-light text-argan-dark border-t border-argan-light">
@@ -43,8 +41,8 @@
       </div>
       <div class="order-1 lg:order-2 flex items-center">
         <div class="bg-argan-light rounded-2xl p-8 h-full w-full">
-          <NuxtImg src="asset_2.jpg" alt="Illustration huile d'argan"
-            class="w-full h-full object-cover rounded-xl" provider="cloudinary" />
+          <NuxtImg src="asset_2.jpg" alt="Illustration huile d'argan" class="w-full h-full object-cover rounded-xl"
+            provider="cloudinary" />
         </div>
       </div>
     </div>

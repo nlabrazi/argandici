@@ -8,10 +8,10 @@
         <div class="absolute inset-0 bg-black/30"></div>
       </div>
       <div class="relative h-full flex flex-col justify-center items-center text-center px-4">
-        <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-6">
+        <h1 v-inview class="reveal reveal-up font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-6">
           Notre histoire
         </h1>
-        <p class="max-w-3xl text-xl text-white/90">
+        <p v-inview class="reveal reveal-up delay-120 max-w-3xl text-xl text-white/90">
           Une aventure franco-marocaine au service de l'authenticité
         </p>
       </div>
@@ -55,8 +55,8 @@
         Nos engagements
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div
-          class="bg-white rounded-2xl p-6 shadow-sm border border-argan-light transition-transform hover:scale-[1.02] text-center">
+        <div v-inview
+          class="reveal reveal-left bg-white rounded-2xl p-6 shadow-sm border border-argan-light transition-transform hover:scale-[1.02] text-center">
           <div class="text-argan-gold text-4xl mb-4">
             <i class="fas fa-hands-holding-circle"></i>
           </div>
@@ -65,8 +65,8 @@
             Travail direct avec les coopératives marocaines pour un revenu équitable et des pratiques durables.
           </p>
         </div>
-        <div
-          class="bg-white rounded-2xl p-6 shadow-sm border border-argan-light transition-transform hover:scale-[1.02] text-center">
+        <div v-inview
+          class="reveal reveal-right bg-white rounded-2xl p-6 shadow-sm border border-argan-light transition-transform hover:scale-[1.02] text-center">
           <div class="text-argan-gold text-4xl mb-4">
             <i class="fas fa-flask"></i>
           </div>
@@ -75,8 +75,8 @@
             Contrôle qualité rigoureux et analyses en laboratoire pour garantir une huile 100% pure.
           </p>
         </div>
-        <div
-          class="bg-white rounded-2xl p-6 shadow-sm border border-argan-light transition-transform hover:scale-[1.02] text-center">
+        <div v-inview
+          class="reveal reveal-left bg-white rounded-2xl p-6 shadow-sm border border-argan-light transition-transform hover:scale-[1.02] text-center">
           <div class="text-argan-gold text-4xl mb-4">
             <i class="fas fa-leaf"></i>
           </div>

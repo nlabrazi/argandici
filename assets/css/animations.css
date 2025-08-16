@@ -1,0 +1,51 @@
+/* Révélations au scroll (sans Tailwind @apply) */
+.reveal {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: 700ms;
+  transition-timing-function: cubic-bezier(.22, 1, .36, 1);
+  /* ease-out */
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+.reveal-up {
+  transform: translateY(1rem);
+}
+
+/* ~ translate-y-4 */
+.reveal-down {
+  transform: translateY(-1rem);
+}
+
+.reveal-left {
+  transform: translateX(-1rem);
+}
+
+.reveal-right {
+  transform: translateX(1rem);
+}
+
+.reveal-zoom {
+  transform: scale(.95);
+}
+
+[data-inview="true"].reveal {
+  opacity: 1;
+  transform: none;
+}
+
+/* petits délais pratiques (utilise aussi les delay-* Tailwind si tu préfères) */
+.delay-120 {
+  transition-delay: 120ms;
+}
+
+.delay-240 {
+  transition-delay: 240ms;
+}

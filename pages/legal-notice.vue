@@ -1,5 +1,5 @@
 <template>
-  <section class="max-w-3xl mx-auto my-12 px-4">
+  <section v-inview class="reveal reveal-down max-w-3xl mx-auto my-12 px-4">
     <h1 class="text-3xl font-bold text-primary mb-6 text-center">Mentions légales</h1>
     <div class="mb-4 text-secondary">
       <p><b>Éditeur :</b> Argan d'ici</p>

@@ -1,7 +1,7 @@
 <template>
   <section class="py-16 bg-argan-light">
     <div class="container mx-auto px-4 max-w-3xl text-center">
-      <div class="bg-white rounded-xl p-8 shadow-sm">
+      <div v-inview class="reveal reveal-up bg-white rounded-xl p-8 shadow-sm">
         <h2 class="font-serif text-3xl mb-4">L'art de l'argan dans votre boîte mail</h2>
         <p class="text-gray-600 mb-8">
           Recevez nos conseils d'utilisation et offres exclusives

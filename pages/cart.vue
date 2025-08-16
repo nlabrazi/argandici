@@ -14,7 +14,7 @@
 
     <!-- Panier avec produits -->
     <div v-else>
-      <div class="space-y-8 mb-8">
+      <div v-inview class="reveal reveal-down space-y-8 mb-8">
         <div v-for="item in cart.items" :key="item.productId"
           class="flex flex-col md:flex-row items-center gap-6 bg-white rounded-xl shadow-sm p-4">
           <NuxtImg :src="item.image" :alt="item.name" class="w-28 h-28 object-contain rounded-lg bg-argan-light" />
@@ -37,7 +37,8 @@
       </div>
 
       <!-- Résumé -->
-      <div class="bg-argan-light rounded-xl p-6 flex flex-col md:flex-row items-center justify-between mb-4">
+      <div v-inview
+        class="reveal reveal-up bg-argan-light rounded-xl p-6 flex flex-col md:flex-row items-center justify-between mb-4">
         <div class="font-serif text-xl text-argan-dark mb-4 md:mb-0">
           Total : <span class="font-bold text-argan-gold">{{ formatPrice(cart.total) }}</span>
         </div>
