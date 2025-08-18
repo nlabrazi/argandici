@@ -1,4 +1,4 @@
-// server/api/orders/orders/[id].get.ts
+// server/api/orders/[id].get.ts
 import { defineEventHandler, createError } from 'h3'
 import { prisma } from '~/server/prisma/client'
 

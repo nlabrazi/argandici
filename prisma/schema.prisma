@@ -48,6 +48,7 @@ model Order {
   fullName        String?
   orderItems      OrderItem[]
   invoiceUrl      String?
+  postPaymentNotifiedAt DateTime?
 }
 
 model OrderItem {
@@ -55,8 +56,11 @@ model OrderItem {
   orderId   String
   productId String
   quantity  Int
+  unitPrice Float
   order     Order   @relation(fields: [orderId], references: [id])
   product   Product @relation(fields: [productId], references: [id])
+  @@index([orderId])
+  @@index([productId])
 }
 
 enum Role {

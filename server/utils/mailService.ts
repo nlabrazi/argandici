@@ -17,7 +17,7 @@ const mgClient = mailgun.client({
 });
 const realDomain = domain as string;
 
-// ✅ Envoi email facture (PDF attaché, ou lien)
+// ✅ Envoi email facture (hérité / conservé si utile ailleurs, mais non utilisé pour la commande)
 export async function sendInvoiceEmail({
   to,
   orderId,
@@ -32,10 +32,7 @@ export async function sendInvoiceEmail({
   const html = `
     <p>Merci pour votre commande !</p>
     <p>Votre facture est disponible ci-dessous.</p>
-    ${pdfUrl
-      ? `<p><a href="${pdfUrl}" target="_blank">Télécharger la facture</a></p>`
-      : ""
-    }
+    ${pdfUrl ? `<p><a href="${pdfUrl}" target="_blank">Télécharger la facture</a></p>` : ""}
   `;
   const msg: any = {
     from: `Argan d'ici <${fromEmail}>`,
@@ -44,29 +41,16 @@ export async function sendInvoiceEmail({
     html,
   }
   if (pdfBuffer) {
-    msg.attachment = [
-      {
-        filename: `facture-${orderId}.pdf`,
-        data: pdfBuffer,
-      },
-    ];
+    msg.attachment = [{ filename: `facture-${orderId}.pdf`, data: pdfBuffer }];
   }
-  await mgClient.messages.create(realDomain, msg)
+  await mgClient.messages.create(realDomain, msg);
   console.log(`📧 Facture envoyée à ${to}`);
 }
 
 // ✅ Envoi de notification de contact
 export async function sendContactNotification({
-  name,
-  email,
-  subject,
-  message,
-}: {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-}) {
+  name, email, subject, message,
+}: { name: string; email: string; subject: string; message: string; }) {
   const html = `
     <h2>Nouveau message de contact</h2>
     <p><strong>De:</strong> ${name} (${email})</p>
@@ -75,7 +59,6 @@ export async function sendContactNotification({
     <p>${message}</p>
     <p><em>Message reçu le ${new Date().toLocaleString('fr-FR')}</em></p>
   `;
-
   await mgClient.messages.create(realDomain, {
     from: `Site Web Argan d'ici <${fromEmail}>`,
     to: [contactRecipient],
@@ -87,33 +70,21 @@ export async function sendContactNotification({
 
 // ✅ Confirmation de contact à l'utilisateur
 export async function sendContactConfirmation({
-  name,
-  email,
-  subject,
-  message,
-}: {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-}) {
+  name, email, subject, message,
+}: { name: string; email: string; subject: string; message: string; }) {
   const html = `
     <h2>Confirmation de réception de votre message</h2>
     <p>Bonjour ${name},</p>
     <p>Nous avons bien reçu votre message et vous remercions de nous avoir contactés.</p>
-
     <h3>Récapitulatif de votre message :</h3>
     <p><strong>Sujet :</strong> ${subject}</p>
     <p><strong>Message :</strong></p>
     <blockquote>${message}</blockquote>
-
     <p>Notre équipe traitera votre demande dans les plus brefs délais et vous répondra très rapidement.</p>
-
     <p>Cordialement,</p>
     <p><strong>L'équipe Argan d'ici</strong></p>
     <p><em>"Pur comme là-bas, authentique comme ici"</em></p>
   `;
-
   await mgClient.messages.create(realDomain, {
     from: `Argan d'ici <${fromEmail}>`,
     to: [email],
@@ -121,4 +92,31 @@ export async function sendContactConfirmation({
     html,
   });
   console.log(`📧 Confirmation de contact envoyée à ${email}`);
+}
+
+// ✅ Email unique de commande : ton TEMPLATE HTML + facture en PJ
+export async function sendOrderEmailWithInvoice({
+  to,
+  subject,
+  html,
+  pdfBuffer,
+  pdfFilename,
+}: {
+  to: string
+  subject?: string
+  html: string
+  pdfBuffer?: Buffer
+  pdfFilename?: string
+}) {
+  const msg: any = {
+    from: `Argan d'ici <${fromEmail}>`,
+    to: [to],
+    subject: subject ?? "Votre commande - Argan d'ici",
+    html,
+  }
+  if (pdfBuffer && pdfFilename) {
+    msg.attachment = [{ filename: pdfFilename, data: pdfBuffer }]
+  }
+  await mgClient.messages.create(realDomain, msg)
+  console.log(`📧 Order email sent to ${to}`)
 }

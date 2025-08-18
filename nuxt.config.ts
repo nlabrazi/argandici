@@ -3,6 +3,11 @@ import { defineNuxtConfig } from "nuxt/config";
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-11',
   css: ['~/assets/css/main.css', '~/assets/css/animations.css'],
+  runtimeConfig: {
+    public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    },
+  },
   nitro: {
     preset: 'netlify',
     externals: {

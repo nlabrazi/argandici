@@ -14,8 +14,9 @@
         <h2 class="font-serif text-2xl text-argan-dark mb-2">Commande confirmée</h2>
         <p class="text-gray-700">Numéro de commande : <strong>{{ orderId }}</strong></p>
         <p class="text-gray-700">Statut : <strong class="text-green-700">Payée</strong></p>
-        <p v-if="email" class="text-gray-700 mt-2">Un e-mail de confirmation a été envoyé à <strong>{{ email
-        }}</strong>.</p>
+        <p v-if="email" class="text-gray-700 mt-2">
+          Un e-mail de confirmation a été envoyé à <strong>{{ email }}</strong>.
+        </p>
       </div>
 
       <div v-if="orderTotal !== null" class="bg-argan-light rounded-xl p-6">
@@ -54,7 +55,7 @@ const notifications = useNotificationStore()
 const state = ref<State>('loading')
 const email = ref<string | null>(null)
 const orderId = ref<string | null>(route.query.order_id as string || null)
-const orderTotal = ref<number | null>(null)       // cents
+const orderTotal = ref<number | null>(null) // cents
 const currency = ref<string>('eur')
 
 function formatCents(amount: number | null, currency: string) {
@@ -65,7 +66,8 @@ function formatCents(amount: number | null, currency: string) {
 async function pollOrderPaid(id: string, tries = 8) {
   for (let i = 0; i < tries; i++) {
     try {
-      const res = await $fetch<{ status: string }>(`/api/orders/orders/${id}`)
+      // ✅ Corrigé: pas de doublon "orders"
+      const res = await $fetch<{ status: string }>(`/api/orders/${id}`)
       if (res.status === 'PAID') return true
     } catch { }
     await new Promise(r => setTimeout(r, 1200))
@@ -100,7 +102,6 @@ onMounted(async () => {
     if (!orderId.value && session.orderId) orderId.value = session.orderId
 
     if (session.payment_status === 'paid') {
-      // on s’assure aussi que le webhook a bien passé la commande à PAID
       if (orderId.value) {
         const ok = await pollOrderPaid(orderId.value)
         if (ok) {
@@ -110,7 +111,6 @@ onMounted(async () => {
           return
         }
       }
-      // si pas d’orderId ou polling échoue, on affiche quand même "paid" Stripe
       state.value = 'paid'
       clearCartOnce()
       return
