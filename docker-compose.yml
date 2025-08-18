@@ -30,7 +30,7 @@ services:
     env_file:
       - ./.env
     environment:
-      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public"
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public&pgbouncer=true"
     ports:
       - "3000:3000"
       - "5555:5555"

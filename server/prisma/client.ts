@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient }
-const databaseUrl = process.env.DATABASE_URL_RUNTIME || process.env.DATABASE_URL
+const databaseUrl = process.env.DATABASE_URL
 
 export const prisma =
   globalForPrisma.prisma ??

@@ -47,6 +47,7 @@ model Order {
   country         String?
   fullName        String?
   orderItems      OrderItem[]
+  invoiceUrl      String?
 }
 
 model OrderItem {

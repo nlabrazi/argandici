@@ -122,7 +122,7 @@ async function submitOrder() {
   errorMessage.value = ''
 
   // 1. Création de la commande
-  const orderRes = await $fetch('/api/orders', {
+  const orderRes = await $fetch('/api/orders/orders', {
     method: 'POST',
     body: {
       items: cart.items.map(item => ({

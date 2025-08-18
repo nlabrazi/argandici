@@ -62,8 +62,8 @@
 - [x] Mise en avant des produits (photos, descriptions)
 - [x] Formulaire de contact intelligent (et inscription à la newsletter)
 - [x] Intégration email Mailgun pour la prise de contact
-- [ ] Catalogue dynamique (produits, paniers, fiches produit)
-- [ ] Paiement Stripe (MVP e-commerce)
+- [x] Catalogue dynamique (produits, paniers, fiches produit)
+- [x] Paiement Stripe (MVP e-commerce)
 - [ ] Espace client (commandes, factures PDF)
 - [ ] Tableau de bord admin (gestion commandes)
 - [ ] SEO avancé (balises OG, sitemap, analytics)

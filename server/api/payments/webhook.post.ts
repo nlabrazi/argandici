@@ -1,6 +1,7 @@
 import Stripe from 'stripe'
 import { readRawBody, createError } from 'h3'
 import { prisma } from '~/server/prisma/client'
+import { OrderStatus } from '@prisma/client'
 import { sendInvoiceEmail } from '~/server/utils/mailService'
 import { generateOrderInvoicePdf, uploadInvoiceToSupabase } from '~/server/utils/pdf'
 
@@ -11,7 +12,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export default defineEventHandler(async (event) => {
   const sig = event.node.req.headers['stripe-signature']
   const rawBody = await readRawBody(event)
-  let stripeEvent
+  let stripeEvent: Stripe.Event
 
   // 1. Vérification de la signature Stripe
   try {
@@ -31,7 +32,6 @@ export default defineEventHandler(async (event) => {
 
   // 3. On ne traite QUE les paiements réussis
   if (stripeEvent.type !== 'checkout.session.completed') {
-    console.log(`[Stripe Webhook] Ignored event type: ${stripeEvent.type}`)
     return
   }
 
@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
     // a. Passage commande en "PAID"
     const order = await prisma.order.update({
       where: { id: orderId },
-      data: { status: 'PAID' },
+      data: { status: OrderStatus.PAID },
       include: { orderItems: { include: { product: true } } }
     })
     console.log(`[Stripe Webhook] Order ${orderId} set to PAID`)
@@ -65,14 +65,17 @@ export default defineEventHandler(async (event) => {
     }
 
     // d. Email facture (client + compta)
-    const recipients = [order.email, 'compta@argandici.com'].filter(Boolean)
-    for (const to of recipients.filter((x): x is string => typeof x === 'string')) {
-      await sendInvoiceEmail({
-        to,
-        orderId,
-        pdfBuffer,
-        pdfUrl,
+    if (pdfUrl) {
+      await prisma.order.update({
+        where: { id: orderId },
+        data: { invoiceUrl: pdfUrl }
       })
+    }
+
+    // e) Envoyer l’email (client + compta), avec le PDF en pièce jointe
+    const recipients = [order.email, 'compta@argandici.com'].filter(Boolean) as string[]
+    for (const to of recipients) {
+      await sendInvoiceEmail({ to, orderId, pdfBuffer, pdfUrl })
       console.log(`[Stripe Webhook] Email sent to ${to}`)
     }
   } catch (err: any) {

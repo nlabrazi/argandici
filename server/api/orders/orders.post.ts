@@ -1,6 +1,5 @@
-import { PrismaClient, OrderStatus, ShippingStatus } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { OrderStatus, ShippingStatus } from '@prisma/client'
+import { prisma } from '~/server/prisma/client'
 
 export default defineEventHandler(async (event) => {
   // Récupère les données du body POST
