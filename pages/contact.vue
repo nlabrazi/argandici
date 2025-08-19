@@ -44,8 +44,8 @@
               placeholder="Votre message..." required></textarea>
             <FormError v-if="errors.message" :error="errors.message" />
           </div>
-          <button type="submit" :disabled="loading"
-            class="w-full bg-argan-gold hover:bg-argan-dark text-gray-800 font-medium py-3 px-6 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+          <button type="submit" :disabled="loading || !isFormValid"
+            class="w-full bg-argan-gold hover:bg-argan-dark hover:text-argan-light text-gray-800 font-medium py-3 px-6 rounded-lg transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
             <span v-if="!loading">Envoyer le message</span>
             <span v-else>Envoi en cours...</span>
           </button>
@@ -138,7 +138,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { useNotificationStore } from '~/stores/notifications'
 
 const notificationStore = useNotificationStore()
@@ -152,6 +152,15 @@ const form = reactive({
 
 const loading = ref(false)
 const errors = reactive<{ [key: string]: string }>({})
+
+const isFormValid = computed(() => {
+  return (
+    form.name.length >= 2 &&
+    /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(form.email) &&
+    form.subject !== "" &&
+    form.message.length >= 10
+  )
+})
 
 function validate() {
   errors.name = !form.name || form.name.length < 2 ? 'Nom requis (2 caractères min.)' : ''

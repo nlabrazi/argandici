@@ -17,7 +17,7 @@
           <div v-for="(item, i) in faqList" :key="i" v-inview
             class="reveal reveal-left border border-argan-light rounded-xl overflow-hidden shadow-sm transition-shadow hover:shadow-md">
             <button @click="toggle(i)"
-              class="w-full flex justify-between items-center px-6 py-5 bg-white text-left hover:bg-argan-light/30 transition-colors focus:outline-none focus:ring-2 focus:ring-argan-gold"
+              class="w-full flex justify-between items-center px-6 py-5 bg-white text-left hover:bg-argan-light/30 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-argan-gold"
               :aria-expanded="openIndex === i" :aria-controls="`faq-panel-${i}`">
               <span class="font-medium text-argan-dark text-lg">{{ item.question }}</span>
               <span class="transform transition-transform text-argan-gold" :class="{ 'rotate-180': openIndex === i }">

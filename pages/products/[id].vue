@@ -73,7 +73,7 @@
             </button>
           </div>
           <button
-            class="bg-argan-gold hover:bg-argan-dark text-white py-3 px-6 rounded-full font-medium transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="bg-argan-gold hover:bg-argan-dark text-white py-3 px-6 rounded-full cursor-pointer font-medium transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             @click="addToCart" :disabled="quantity < 1 || quantity > product.stock || addingToCart">
             <span v-if="!addingToCart"><i class="fas fa-shopping-cart mr-2"></i> Ajouter au panier</span>
             <span v-else><i class="fas fa-spinner fa-spin mr-2"></i> Ajout...</span>

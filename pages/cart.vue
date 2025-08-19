@@ -44,12 +44,12 @@
         </div>
         <div class="flex gap-4">
           <button @click="checkout"
-            class="bg-argan-gold hover:bg-argan-dark text-white px-6 py-3 rounded-full transition font-medium flex items-center gap-2">
+            class="bg-argan-gold hover:bg-argan-dark text-white px-6 py-3 cursor-pointer rounded-full transition font-medium flex items-center gap-2">
             <i class="fas fa-credit-card"></i>
             Valider la commande
           </button>
           <button @click="clear"
-            class="bg-gray-200 hover:bg-red-200 text-gray-600 px-6 py-3 rounded-full transition font-medium flex items-center gap-2">
+            class="bg-gray-200 hover:bg-red-200 text-gray-600 px-6 py-3 cursor-pointer rounded-full transition font-medium flex items-center gap-2">
             <i class="fas fa-times"></i>
             Vider le panier
           </button>
