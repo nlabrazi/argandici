@@ -29,15 +29,18 @@
       </li>
     </ul>
     <!-- Cart Icon -->
-    <NuxtLink to="/cart" class="relative hover:text-argan-gold transition ml-4 md:ml-0">
+    <NuxtLink to="/cart" class="relative hover:text-argan-gold transition ml-4 md:ml-0" aria-label="Panier">
       <i class="fas fa-shopping-cart text-xl"></i>
-      <span v-if="cartCount > 0"
-        class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-        {{ cartCount }}
-      </span>
+      <ClientOnly>
+        <span v-if="count > 0"
+          class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold min-w-5 h-5 px-1 flex items-center justify-center rounded-full">
+          {{ count }}
+        </span>
+      </ClientOnly>
     </NuxtLink>
     <!-- Mobile menu button -->
-    <button @click="toggleMenu" class="md:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-primary">
+    <button @click="toggleMenu" class="md:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-primary"
+      aria-label="Menu">
       <span v-if="!menuOpen">☰</span>
       <span v-else>✕</span>
     </button>
@@ -63,11 +66,16 @@
 </template>
 
 <script setup lang="ts">
-// Pour le compteur du panier
-import { ref } from "vue"
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useCartStore } from '~/stores/cart' // ajuste le chemin si besoin
+
+// Menu mobile
 const menuOpen = ref(false)
 function toggleMenu() { menuOpen.value = !menuOpen.value }
 function closeMenu() { menuOpen.value = false }
-// À remplacer par ton vrai store panier !
-const cartCount = ref(0)
+
+// Panier (Pinia)
+const cart = useCartStore()
+const { count } = storeToRefs(cart) // getter réactif
 </script>

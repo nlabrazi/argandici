@@ -10,8 +10,10 @@ export interface CartItem {
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
+    version: '1.0',
     items: [] as CartItem[],
   }),
+  persist: true,
   getters: {
     total(state): number {
       return state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
