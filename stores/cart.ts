@@ -1,32 +1,33 @@
+// stores/cart.ts
 import { defineStore } from 'pinia'
 
-export interface CartItem {
+export interface CartLine {
   productId: string
-  name: string
-  price: number
-  image: string
   quantity: number
 }
 
+export interface CartState {
+  version: string
+  items: CartLine[]
+}
+
 export const useCartStore = defineStore('cart', {
-  state: () => ({
+  state: (): CartState => ({
     version: '1.0',
-    items: [] as CartItem[],
+    items: [],
   }),
   persist: true,
   getters: {
-    total(state): number {
-      return state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-    },
-    count(state): number {
-      return state.items.reduce((n, item) => n + item.quantity, 0)
-    }
+    count: (state) => state.items.reduce((n, it) => n + it.quantity, 0),
   },
   actions: {
-    addToCart(product: Omit<CartItem, 'quantity'>, quantity = 1) {
-      const existing = this.items.find(i => i.productId === product.productId)
-      if (existing) existing.quantity += quantity
-      else this.items.push({ ...product, quantity })
+    addToCart(product: { id?: string; productId?: string } | string, quantity = 1) {
+      const productId = typeof product === 'string'
+        ? product
+        : (product.productId ?? product.id)
+      if (!productId) return
+      const existing = this.items.find(i => i.productId === productId)
+      existing ? (existing.quantity += quantity) : this.items.push({ productId, quantity })
     },
     removeFromCart(productId: string) {
       this.items = this.items.filter(i => i.productId !== productId)

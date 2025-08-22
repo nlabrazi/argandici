@@ -175,12 +175,8 @@ function decreaseQuantity() {
 async function addToCart() {
   if (!product.value || quantity.value < 1) return
   addingToCart.value = true
-  // Appelle ton store/cart ici selon API de ton store
   cart.addToCart({
     productId: product.value.id,
-    name: product.value.name,
-    price: product.value.price,
-    image: product.value.image,
   }, quantity.value)
   notifications.showToast('Produit ajouté au panier !', 'success')
   setTimeout(() => { addingToCart.value = false }, 1000)

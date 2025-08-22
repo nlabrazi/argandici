@@ -33,7 +33,19 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxt/image',
     '@nuxt/ui',
+    'pinia-plugin-persistedstate/nuxt',
   ],
+
+  piniaPluginPersistedstate: {
+    storage: 'cookies',
+    cookieOptions: {
+      path: '/',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 30,
+      secure: process.env.NODE_ENV === 'production',
+    },
+    key: 'argandici_%id',
+  },
 
   app: {
     head: {
