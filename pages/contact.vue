@@ -138,64 +138,71 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from 'vue'
-import { useNotificationStore } from '~/stores/notifications'
+import { reactive, ref, computed } from "vue"
+import { useNotificationStore } from "~/stores/notifications"
 
 const notificationStore = useNotificationStore()
 
 const form = reactive({
-  name: '',
-  email: '',
-  subject: '',
-  message: ''
+	name: "",
+	email: "",
+	subject: "",
+	message: "",
 })
 
 const loading = ref(false)
 const errors = reactive<{ [key: string]: string }>({})
 
 const isFormValid = computed(() => {
-  return (
-    form.name.length >= 2 &&
-    /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(form.email) &&
-    form.subject !== "" &&
-    form.message.length >= 10
-  )
+	return (
+		form.name.length >= 2 &&
+		/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(form.email) &&
+		form.subject !== "" &&
+		form.message.length >= 10
+	)
 })
 
 function validate() {
-  errors.name = !form.name || form.name.length < 2 ? 'Nom requis (2 caractères min.)' : ''
-  errors.email = !form.email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(form.email) ? 'Email valide requis' : ''
-  errors.subject = !form.subject ? 'Sujet requis' : ''
-  errors.message = !form.message || form.message.length < 10 ? 'Message trop court' : ''
-  return !Object.values(errors).some(Boolean)
+	errors.name = !form.name || form.name.length < 2 ? "Nom requis (2 caractères min.)" : ""
+	errors.email =
+		!form.email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(form.email) ? "Email valide requis" : ""
+	errors.subject = !form.subject ? "Sujet requis" : ""
+	errors.message = !form.message || form.message.length < 10 ? "Message trop court" : ""
+	return !Object.values(errors).some(Boolean)
 }
 
 async function onSubmit() {
-  if (!validate()) return
-  loading.value = true
-  try {
-    await $fetch('/api/contact', { method: 'POST', body: { ...form } })
-    Object.keys(form).forEach((k) => {
-      (form as any)[k] = ''
-    })
-    notificationStore.showToast('Merci pour votre message ! Nous vous répondrons rapidement.', 'success')
-  } catch (e) {
-    notificationStore.showToast('Erreur lors de l’envoi du message. Essayez à nouveau ou contactez-nous par email.', 'error')
-  } finally {
-    loading.value = false
-  }
+	if (!validate()) return
+	loading.value = true
+	try {
+		await $fetch("/api/contact", { method: "POST", body: { ...form } })
+		Object.keys(form).forEach((k) => {
+			;(form as any)[k] = ""
+		})
+		notificationStore.showToast(
+			"Merci pour votre message ! Nous vous répondrons rapidement.",
+			"success",
+		)
+	} catch (e) {
+		notificationStore.showToast(
+			"Erreur lors de l’envoi du message. Essayez à nouveau ou contactez-nous par email.",
+			"error",
+		)
+	} finally {
+		loading.value = false
+	}
 }
 
 function inputClass(err: string | undefined) {
-  return [
-    "w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-argan-gold focus:border-transparent",
-    err ? "border-red-400 ring-red-100" : "border-argan-light"
-  ]
+	return [
+		"w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-argan-gold focus:border-transparent",
+		err ? "border-red-400 ring-red-100" : "border-argan-light",
+	]
 }
 
 // Composant local pour affichage erreur champ
 const FormError = {
-  props: { error: String },
-  template: `<div class="mt-1 text-sm text-red-500">{{ error }}</div>`
+	props: { error: String },
+	template: `<div class="mt-1 text-sm text-red-500">{{ error }}</div>`,
 }
 </script>

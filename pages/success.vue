@@ -41,84 +41,87 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { useCartStore } from '~/stores/cart'
-import { useNotificationStore } from '~/stores/notifications'
+import { onMounted, ref } from "vue"
+import { useRoute } from "vue-router"
+import { useCartStore } from "~/stores/cart"
+import { useNotificationStore } from "~/stores/notifications"
 
-type State = 'loading' | 'paid' | 'unpaid'
+type State = "loading" | "paid" | "unpaid"
 
 const route = useRoute()
 const cart = useCartStore()
 const notifications = useNotificationStore()
 
-const state = ref<State>('loading')
+const state = ref<State>("loading")
 const email = ref<string | null>(null)
-const orderId = ref<string | null>(route.query.order_id as string || null)
+const orderId = ref<string | null>((route.query.order_id as string) || null)
 const orderTotal = ref<number | null>(null) // cents
-const currency = ref<string>('eur')
+const currency = ref<string>("eur")
 
 function formatCents(amount: number | null, currency: string) {
-  if (amount === null) return ''
-  return (amount / 100).toLocaleString('fr-FR', { style: 'currency', currency })
+	if (amount === null) return ""
+	return (amount / 100).toLocaleString("fr-FR", { style: "currency", currency })
 }
 
 async function pollOrderPaid(id: string, tries = 8) {
-  for (let i = 0; i < tries; i++) {
-    try {
-      // ✅ Corrigé: pas de doublon "orders"
-      const res = await $fetch<{ status: string }>(`/api/orders/${id}`)
-      if (res.status === 'PAID') return true
-    } catch { }
-    await new Promise(r => setTimeout(r, 1200))
-  }
-  return false
+	for (let i = 0; i < tries; i++) {
+		try {
+			// ✅ Corrigé: pas de doublon "orders"
+			const res = await $fetch<{ status: string }>(`/api/orders/${id}`)
+			if (res.status === "PAID") return true
+		} catch {}
+		await new Promise((r) => setTimeout(r, 1200))
+	}
+	return false
 }
 
 let cartCleared = false
 function clearCartOnce() {
-  if (!cartCleared) {
-    cart.clearCart()
-    cartCleared = true
-  }
+	if (!cartCleared) {
+		cart.clearCart()
+		cartCleared = true
+	}
 }
 
 onMounted(async () => {
-  const sessionId = route.query.session_id as string | undefined
-  if (!sessionId) { state.value = 'unpaid'; return }
+	const sessionId = route.query.session_id as string | undefined
+	if (!sessionId) {
+		state.value = "unpaid"
+		return
+	}
 
-  try {
-    const session = await $fetch<{
-      payment_status: 'paid' | 'unpaid' | 'no_payment_required'
-      amount_total: number | null
-      currency: string
-      email: string | null
-      orderId: string | null
-    }>(`/api/payments/session?id=${sessionId}`)
+	try {
+		const session = await $fetch<{
+			payment_status: "paid" | "unpaid" | "no_payment_required"
+			amount_total: number | null
+			currency: string
+			email: string | null
+			orderId: string | null
+		}>(`/api/payments/session?id=${sessionId}`)
 
-    email.value = session.email
-    currency.value = session.currency || 'eur'
-    if (session.amount_total != null) orderTotal.value = session.amount_total
-    if (!orderId.value && session.orderId) orderId.value = session.orderId
+		email.value = session.email
+		currency.value = session.currency || "eur"
+		if (session.amount_total != null) orderTotal.value = session.amount_total
+		if (!orderId.value && session.orderId) orderId.value = session.orderId
 
-    if (session.payment_status === 'paid') {
-      if (orderId.value) {
-        const ok = await pollOrderPaid(orderId.value)
-        if (ok) {
-          state.value = 'paid'
-          clearCartOnce()
-          notifications.showToast('Paiement confirmé. Merci !', 'success')
-          return
-        }
-      }
-      state.value = 'paid'
-      clearCartOnce()
-      return
-    }
+		if (session.payment_status === "paid") {
+			if (orderId.value) {
+				const ok = await pollOrderPaid(orderId.value)
+				if (ok) {
+					state.value = "paid"
+					clearCartOnce()
+					notifications.showToast("Paiement confirmé. Merci !", "success")
+					return
+				}
+			}
+			state.value = "paid"
+			clearCartOnce()
+			return
+		}
 
-    state.value = 'unpaid'
-  } catch (e) {
-    state.value = 'unpaid'
-  }
+		state.value = "unpaid"
+	} catch (e) {
+		state.value = "unpaid"
+	}
 })
 </script>

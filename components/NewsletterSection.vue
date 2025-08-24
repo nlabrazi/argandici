@@ -21,12 +21,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-const email = ref('')
+import { ref } from "vue"
+const email = ref("")
 function onSubmit() {
-  if (email.value && email.value.includes('@')) {
-    console.log('Email submitted:', email.value)
-    email.value = ''
-  }
+	if (email.value?.includes("@")) {
+		console.log("Email submitted:", email.value)
+		email.value = ""
+	}
 }
 </script>

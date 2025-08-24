@@ -40,10 +40,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { Product } from '~/stores/products'
+import { computed } from "vue"
+import type { Product } from "~/stores/products"
 
-const { data } = await useFetch<Product[]>('/api/products')
+const { data } = await useFetch<Product[]>("/api/products")
 
 const items = computed<Product[]>(() => data.value ?? [])
 </script>

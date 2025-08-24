@@ -1,26 +1,28 @@
 // server/api/webhook.post.ts
-import Stripe from 'stripe'
-import { readRawBody, createError } from 'h3'
-import { prisma } from '~/server/prisma/client'
-import { OrderStatus } from '@prisma/client'
-import { generateOrderInvoicePdf, uploadInvoiceToSupabase } from '~/server/utils/pdf'
-import { generateOrderEmailHtml } from '~/server/utils/orderEmailTemplate'
-import { sendOrderEmailWithInvoice } from '~/server/utils/mailService'
-import { sendTelegramMessage, buildTelegramOrderMessage } from '~/server/utils/telegram'
+export const config = { bodyParser: false }
+
+import Stripe from "stripe"
+import { readRawBody, createError } from "h3"
+import { prisma } from "~/server/prisma/client"
+import { OrderStatus } from "@prisma/client"
+import { generateOrderInvoicePdf, uploadInvoiceToSupabase } from "~/server/utils/pdf"
+import { generateOrderEmailHtml } from "~/server/utils/orderEmailTemplate"
+import { sendOrderEmailWithInvoice } from "~/server/utils/mailService"
+import { sendTelegramMessage, buildTelegramOrderMessage } from "~/server/utils/telegram"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: process.env.STRIPE_API_VERSION as any,
 })
 
 export default defineEventHandler(async (event) => {
-  const sig = event.node.req.headers['stripe-signature']
-  const rawBody = await readRawBody(event)
+  const sig = event.node.req.headers["stripe-signature"]
+  const rawBody = await readRawBody(event, "utf-8")
   let stripeEvent: Stripe.Event
 
   try {
     stripeEvent = stripe.webhooks.constructEvent(rawBody!, sig!, process.env.STRIPE_WEBHOOK_SECRET!)
   } catch (err: any) {
-    console.error('[Stripe Webhook] Invalid signature:', err.message)
+    console.error("[Stripe Webhook] Invalid signature:", err.message)
     throw createError({ statusCode: 400, statusMessage: `Webhook Error: ${err.message}` })
   }
 
@@ -28,12 +30,12 @@ export default defineEventHandler(async (event) => {
   event.node.res.statusCode = 200
   event.node.res.end(JSON.stringify({ received: true }))
 
-  if (stripeEvent.type !== 'checkout.session.completed') return
+  if (stripeEvent.type !== "checkout.session.completed") return
 
   const session = stripeEvent.data.object as Stripe.Checkout.Session
   const orderId = session.metadata?.orderId
   if (!orderId) {
-    console.error('[Stripe Webhook] No orderId in session.metadata')
+    console.error("[Stripe Webhook] No orderId in session.metadata")
     return
   }
 
@@ -44,14 +46,14 @@ export default defineEventHandler(async (event) => {
       include: { orderItems: { include: { product: true } } },
     })
     if (!order) {
-      console.error('[Stripe Webhook] Order not found:', orderId)
-      return
+      console.error("[Stripe Webhook] Order not found:", orderId)
+      return { received: true }
     }
 
     // 2) Idempotence : si déjà notifié, stop
     if (order.postPaymentNotifiedAt) {
       console.log(`[Stripe Webhook] Order ${orderId} already notified, skipping.`)
-      return
+      return { received: true }
     }
 
     // 3) Passer en PAID si pas déjà
@@ -87,7 +89,7 @@ export default defineEventHandler(async (event) => {
       await prisma.order.update({ where: { id: orderId }, data: { invoiceUrl: pdfUrl } })
       console.log(`[Stripe Webhook] PDF uploaded: ${pdfUrl}`)
     } catch (e) {
-      console.warn('[Stripe Webhook] PDF upload failed, will send as attachment only.')
+      console.warn("[Stripe Webhook] PDF upload failed, will send as attachment only.")
     }
 
     // 6) Email unique (template "beau" + PJ PDF)
@@ -117,7 +119,7 @@ export default defineEventHandler(async (event) => {
       // (Optionnel) copie compta :
       // await sendOrderEmailWithInvoice({ to: 'compta@argandici.com', subject: ..., html, pdfBuffer, pdfFilename: ... })
     } catch (e) {
-      console.error('[Stripe Webhook] Email send error:', (e as any)?.message || e)
+      console.error("[Stripe Webhook] Email send error:", (e as any)?.message || e)
     }
 
     // 7) Telegram — un seul message
@@ -125,7 +127,7 @@ export default defineEventHandler(async (event) => {
       const msg = buildTelegramOrderMessage(order as any)
       await sendTelegramMessage(msg)
     } catch (e) {
-      console.error('[Stripe Webhook] Telegram error:', (e as any)?.message || e)
+      console.error("[Stripe Webhook] Telegram error:", (e as any)?.message || e)
     }
 
     // 8) Marquer la notif (idempotence forte)
@@ -134,7 +136,9 @@ export default defineEventHandler(async (event) => {
       data: { postPaymentNotifiedAt: new Date() },
     })
     console.log(`[Stripe Webhook] Order ${orderId} notifications done.`)
+    return { received: true }
   } catch (err: any) {
     console.error(`[Stripe Webhook] ERROR for order ${orderId}:`, err.message)
+    return { received: true }
   }
 })

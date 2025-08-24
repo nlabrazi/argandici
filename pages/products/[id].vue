@@ -121,11 +121,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { useProductsStore } from '~/stores/products'
-import { useCartStore } from '~/stores/cart'
-import { useNotificationStore } from '~/stores/notifications'
+import { ref, watch, computed, onMounted } from "vue"
+import { useRoute } from "vue-router"
+import { useProductsStore } from "~/stores/products"
+import { useCartStore } from "~/stores/cart"
+import { useNotificationStore } from "~/stores/notifications"
 
 const route = useRoute()
 const productsStore = useProductsStore()
@@ -137,48 +137,56 @@ const quantity = ref(1)
 const addingToCart = ref(false)
 
 const product = computed(() => {
-  return productsStore.products.find(p => p.id === route.params.id)
+	return productsStore.products.find((p) => p.id === route.params.id)
 })
 
 onMounted(async () => {
-  await productsStore.fetchProducts()
-  updateSelectedImage()
-  isLoading.value = false
+	await productsStore.fetchProducts()
+	updateSelectedImage()
+	isLoading.value = false
 })
 
-watch(() => route.params.id, () => {
-  updateSelectedImage()
-})
+watch(
+	() => route.params.id,
+	() => {
+		updateSelectedImage()
+	},
+)
 
 function updateSelectedImage() {
-  if (product.value) {
-    selectedImage.value = product.value.images?.[0] || product.value.image
-    quantity.value = 1
-  } else {
-    selectedImage.value = undefined
-    quantity.value = 1
-  }
+	if (product.value) {
+		selectedImage.value = product.value.images?.[0] || product.value.image
+		quantity.value = 1
+	} else {
+		selectedImage.value = undefined
+		quantity.value = 1
+	}
 }
 
 function increaseQuantity() {
-  if (product.value && quantity.value < product.value.stock) {
-    quantity.value++
-  }
+	if (product.value && quantity.value < product.value.stock) {
+		quantity.value++
+	}
 }
 
 function decreaseQuantity() {
-  if (quantity.value > 1) {
-    quantity.value--
-  }
+	if (quantity.value > 1) {
+		quantity.value--
+	}
 }
 
 async function addToCart() {
-  if (!product.value || quantity.value < 1) return
-  addingToCart.value = true
-  cart.addToCart({
-    productId: product.value.id,
-  }, quantity.value)
-  notifications.showToast('Produit ajouté au panier !', 'success')
-  setTimeout(() => { addingToCart.value = false }, 1000)
+	if (!product.value || quantity.value < 1) return
+	addingToCart.value = true
+	cart.addToCart(
+		{
+			productId: product.value.id,
+		},
+		quantity.value,
+	)
+	notifications.showToast("Produit ajouté au panier !", "success")
+	setTimeout(() => {
+		addingToCart.value = false
+	}, 1000)
 }
 </script>

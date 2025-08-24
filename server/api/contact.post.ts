@@ -1,24 +1,27 @@
-import { sendContactNotification, sendContactConfirmation } from '../utils/mailService';
+import { sendContactNotification, sendContactConfirmation } from "../utils/mailService"
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
+	const body = await readBody(event)
 
-  const { name, email, subject, message } = body;
+	const { name, email, subject, message } = body
 
-  // Basic validation
-  if (
-    !name || !email || !subject || !message ||
-    typeof name !== "string" ||
-    typeof email !== "string" ||
-    typeof subject !== "string" ||
-    typeof message !== "string"
-  ) {
-    throw createError({ statusCode: 400, statusMessage: "Données invalides" });
-  }
+	// Basic validation
+	if (
+		!name ||
+		!email ||
+		!subject ||
+		!message ||
+		typeof name !== "string" ||
+		typeof email !== "string" ||
+		typeof subject !== "string" ||
+		typeof message !== "string"
+	) {
+		throw createError({ statusCode: 400, statusMessage: "Données invalides" })
+	}
 
-  // Envoi des emails
-  await sendContactNotification({ name, email, subject, message });
-  await sendContactConfirmation({ name, email, subject, message });
+	// Envoi des emails
+	await sendContactNotification({ name, email, subject, message })
+	await sendContactConfirmation({ name, email, subject, message })
 
-  return { ok: true };
-});
+	return { ok: true }
+})

@@ -1,100 +1,114 @@
 // server/utils/mailService.ts
-import Mailgun from "mailgun.js";
-import formData from "form-data";
+import Mailgun from "mailgun.js"
+import formData from "form-data"
 
-const apiKey = process.env.MAILGUN_API_KEY;
-const domain = process.env.MAILGUN_DOMAIN;
-const fromEmail = process.env.MAILGUN_FROM ?? `postmaster@${domain}`;
-const contactRecipient = process.env.CONTACT_RECIPIENT ?? 'contact@argandici.com';
+// ── ENV ──────────────────────────────────────────────────────────────────────
+const apiKey = process.env.MAILGUN_API_KEY
+const domain = process.env.MAILGUN_DOMAIN          // ex: mg.argandici.com ou sandboxxxxx.mailgun.org
+const fromEmail = process.env.MAILGUN_FROM ?? (domain ? `postmaster@${domain}` : undefined) // fallback propre
+const contactRecipient = process.env.CONTACT_RECIPIENT ?? "contact@argandici.com"
 
-if (!apiKey || !domain) throw new Error('MAILGUN_API_KEY or MAILGUN_DOMAIN missing in env');
+// Région : EU => api.eu.mailgun.net, US => api.mailgun.net (par défaut EU)
+const region = (process.env.MAILGUN_REGION || "EU").toUpperCase()
+const baseUrl = region === "US" ? "https://api.mailgun.net" : "https://api.eu.mailgun.net"
 
-const mailgun = new Mailgun(formData);
-const mgClient = mailgun.client({
-  username: "api",
-  key: apiKey,
-  url: "https://api.eu.mailgun.net",
-});
-const realDomain = domain as string;
+// ── CLIENT ───────────────────────────────────────────────────────────────────
+const mailgun = new Mailgun(formData)
+const mgClient = (apiKey && domain)
+  ? mailgun.client({ username: "api", key: apiKey, url: baseUrl })
+  : null
 
-// ✅ Envoi email facture (hérité / conservé si utile ailleurs, mais non utilisé pour la commande)
-export async function sendInvoiceEmail({
-  to,
-  orderId,
-  pdfBuffer,
-  pdfUrl,
-}: {
-  to: string;
-  orderId: string;
-  pdfBuffer?: Buffer;
-  pdfUrl?: string;
-}) {
-  const html = `
-    <p>Merci pour votre commande !</p>
-    <p>Votre facture est disponible ci-dessous.</p>
-    ${pdfUrl ? `<p><a href="${pdfUrl}" target="_blank">Télécharger la facture</a></p>` : ""}
-  `;
-  const msg: any = {
-    from: `Argan d'ici <${fromEmail}>`,
-    to: [to],
-    subject: `Votre facture - Commande ${orderId}`,
-    html,
-  }
-  if (pdfBuffer) {
-    msg.attachment = [{ filename: `facture-${orderId}.pdf`, data: pdfBuffer }];
-  }
-  await mgClient.messages.create(realDomain, msg);
-  console.log(`📧 Facture envoyée à ${to}`);
+function requireMailgun() {
+  if (!apiKey) throw new Error("MAILGUN_API_KEY missing")
+  if (!domain) throw new Error("MAILGUN_DOMAIN missing")
+  if (!fromEmail) throw new Error("MAILGUN_FROM missing (and no default could be derived)")
+  if (!mgClient) throw new Error("Mailgun client not initialized")
 }
 
-// ✅ Envoi de notification de contact
+// Envoi avec logs d’erreur détaillés (status, body renvoyé par Mailgun, etc.)
+async function sendWithLogs(msg: any) {
+  requireMailgun()
+  try {
+    const res = await mgClient!.messages.create(domain!, msg)
+    console.log("[mailgun] sent:", res?.id ?? res)
+    return res
+  } catch (e: any) {
+    const status = e?.status
+    const message = e?.message
+    const details = e?.details
+    const responseBody = e?.response?.body
+    console.error("[mailgun] ERROR", { status, message, details, responseBody, domain, fromEmail, baseUrl })
+    throw e
+  }
+}
+
+// ── API PUBLIQUE ─────────────────────────────────────────────────────────────
+// ✅ Notification interne “contact”
 export async function sendContactNotification({
-  name, email, subject, message,
-}: { name: string; email: string; subject: string; message: string; }) {
+  name,
+  email,
+  subject,
+  message,
+}: {
+  name: string
+  email: string
+  subject: string
+  message: string
+}) {
   const html = `
     <h2>Nouveau message de contact</h2>
     <p><strong>De:</strong> ${name} (${email})</p>
     <p><strong>Sujet:</strong> ${subject}</p>
     <h3>Message:</h3>
     <p>${message}</p>
-    <p><em>Message reçu le ${new Date().toLocaleString('fr-FR')}</em></p>
-  `;
-  await mgClient.messages.create(realDomain, {
+    <p><em>Message reçu le ${new Date().toLocaleString("fr-FR")}</em></p>
+  `
+  const res = await sendWithLogs({
     from: `Site Web Argan d'ici <${fromEmail}>`,
     to: [contactRecipient],
     subject: `[CONTACT] ${subject}`,
     html,
-  });
-  console.log(`📧 Notification de contact envoyée à ${contactRecipient}`);
+  } as any)
+
+  // 👇 ton log d'origine rétabli
+  console.log(`📧 Notification de contact envoyée à ${contactRecipient}`)
+  return res
 }
 
-// ✅ Confirmation de contact à l'utilisateur
+// ✅ Accusé de réception “contact” au client
 export async function sendContactConfirmation({
-  name, email, subject, message,
-}: { name: string; email: string; subject: string; message: string; }) {
+  name,
+  email,
+  subject,
+  message,
+}: {
+  name: string
+  email: string
+  subject: string
+  message: string
+}) {
   const html = `
     <h2>Confirmation de réception de votre message</h2>
     <p>Bonjour ${name},</p>
     <p>Nous avons bien reçu votre message et vous remercions de nous avoir contactés.</p>
-    <h3>Récapitulatif de votre message :</h3>
+    <h3>Récapitulatif :</h3>
     <p><strong>Sujet :</strong> ${subject}</p>
-    <p><strong>Message :</strong></p>
     <blockquote>${message}</blockquote>
-    <p>Notre équipe traitera votre demande dans les plus brefs délais et vous répondra très rapidement.</p>
-    <p>Cordialement,</p>
-    <p><strong>L'équipe Argan d'ici</strong></p>
-    <p><em>"Pur comme là-bas, authentique comme ici"</em></p>
-  `;
-  await mgClient.messages.create(realDomain, {
+    <p>Cordialement,<br/><strong>L'équipe Argan d'ici</strong></p>
+  `
+  const res = await sendWithLogs({
     from: `Argan d'ici <${fromEmail}>`,
     to: [email],
     subject: `Confirmation de réception : ${subject}`,
     html,
-  });
-  console.log(`📧 Confirmation de contact envoyée à ${email}`);
+  } as any)
+
+  // 👇 ton log d'origine rétabli
+  console.log(`📧 Confirmation de contact envoyée à ${email}`)
+  return res
 }
 
-// ✅ Email unique de commande : ton TEMPLATE HTML + facture en PJ
+// ✅ Email commande unique (template HTML) + PJ PDF optionnelle
 export async function sendOrderEmailWithInvoice({
   to,
   subject,
@@ -117,6 +131,10 @@ export async function sendOrderEmailWithInvoice({
   if (pdfBuffer && pdfFilename) {
     msg.attachment = [{ filename: pdfFilename, data: pdfBuffer }]
   }
-  await mgClient.messages.create(realDomain, msg)
+
+  const res = await sendWithLogs(msg)
+
+  // 👇 ton log d'origine rétabli
   console.log(`📧 Order email sent to ${to}`)
+  return res
 }

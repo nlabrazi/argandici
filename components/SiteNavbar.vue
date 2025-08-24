@@ -64,14 +64,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useCartStore } from '~/stores/cart'
+import { ref } from "vue"
+import { storeToRefs } from "pinia"
+import { useCartStore } from "~/stores/cart"
 
 // Menu mobile
 const menuOpen = ref(false)
-function toggleMenu() { menuOpen.value = !menuOpen.value }
-function closeMenu() { menuOpen.value = false }
+function toggleMenu() {
+	menuOpen.value = !menuOpen.value
+}
+function closeMenu() {
+	menuOpen.value = false
+}
 
 // Panier (Pinia)
 const cart = useCartStore()

@@ -73,25 +73,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useProductsStore } from '~/stores/products'
+import { ref, computed, onMounted } from "vue"
+import { useProductsStore } from "~/stores/products"
 
-const categories = ['Tous', 'Cosmétique', 'Alimentaire', 'Soins']
-const selectedCategory = ref('Tous')
+const categories = ["Tous", "Cosmétique", "Alimentaire", "Soins"]
+const selectedCategory = ref("Tous")
 const isLoading = ref(true)
 
 const productsStore = useProductsStore()
 const filteredProducts = computed(() => {
-  if (selectedCategory.value === 'Tous') return productsStore.products
-  return productsStore.products.filter(p => p.category === selectedCategory.value)
+	if (selectedCategory.value === "Tous") return productsStore.products
+	return productsStore.products.filter((p) => p.category === selectedCategory.value)
 })
 
 function filterByCategory(category: string) {
-  selectedCategory.value = category
+	selectedCategory.value = category
 }
 
 onMounted(async () => {
-  await productsStore.fetchProducts()
-  isLoading.value = false
+	await productsStore.fetchProducts()
+	isLoading.value = false
 })
 </script>

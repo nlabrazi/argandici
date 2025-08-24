@@ -14,6 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import { useNotificationStore } from '@/stores/notifications'
+import { useNotificationStore } from "@/stores/notifications"
 const notifications = useNotificationStore()
 </script>
