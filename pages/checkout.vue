@@ -11,58 +11,78 @@
     </div>
 
     <div v-else v-inview class="reveal reveal-down">
-      <form @submit.prevent="submitOrder" class="space-y-6">
+      <Form :validation-schema="schema" :initial-values="form" @submit="(values) => onSubmit(values as CheckoutValues)"
+        v-slot="{ errors, meta, setFieldValue }" class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="block text-sm font-medium text-gray-700">Nom complet</label>
-            <input v-model="form.fullName" type="text" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
-       px-4 h-10 text-gray-900 placeholder-gray-400
-       caret-argan-gold focus:outline-none focus:ring-2
-       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
+            <Field name="fullName" as="input" type="text" class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+                     px-4 h-10 text-gray-900 placeholder-gray-400
+                     caret-argan-gold focus:outline-none focus:ring-2
+                     focus:ring-argan-gold/60 focus:border-argan-gold text-lg" />
+            <ErrorMessage name="fullName" class="text-red-600 text-sm mt-1" />
           </div>
+
           <div>
             <label class="block text-sm font-medium text-gray-700">Email</label>
-            <input v-model="form.email" type="email" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
-       px-4 h-10 text-gray-900 placeholder-gray-400
-       caret-argan-gold focus:outline-none focus:ring-2
-       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
+            <Field name="email" as="input" type="email" autocomplete="email" class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+                     px-4 h-10 text-gray-900 placeholder-gray-400
+                     caret-argan-gold focus:outline-none focus:ring-2
+                     focus:ring-argan-gold/60 focus:border-argan-gold text-lg" />
+            <ErrorMessage name="email" class="text-red-600 text-sm mt-1" />
           </div>
         </div>
+
+        <!-- Adresse ligne 1 avec Autocomplete API Adresse -->
         <div>
           <label class="block text-sm font-medium text-gray-700">Adresse ligne 1</label>
-          <input v-model="form.addressLine1" type="text" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
-       px-4 h-10 text-gray-900 placeholder-gray-400
-       caret-argan-gold focus:outline-none focus:ring-2
-       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
+          <Field name="addressLine1" v-slot="{ value, handleChange }">
+            <AddressAutocomplete :modelValue="(value as string) || ''" placeholder="12 Rue de l'Exemple"
+              @update:modelValue="(v) => handleChange(v)" @select="(addr) => {
+                setFieldValue('addressLine1', addr.line1)
+                if (addr.postalCode) setFieldValue('postalCode', addr.postalCode)
+                if (addr.city) setFieldValue('city', addr.city)
+                setFieldValue('country', 'France')
+              }" />
+          </Field>
+          <ErrorMessage name="addressLine1" class="text-red-600 text-sm mt-1" />
         </div>
+
         <div>
           <label class="block text-sm font-medium text-gray-700">Adresse ligne 2 (facultatif)</label>
-          <input v-model="form.addressLine2" type="text" class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
-       px-4 h-10 text-gray-900 placeholder-gray-400
-       caret-argan-gold focus:outline-none focus:ring-2
-       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
+          <Field name="addressLine2" as="input" type="text" class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+                   px-4 h-10 text-gray-900 placeholder-gray-400
+                   caret-argan-gold focus:outline-none focus:ring-2
+                   focus:ring-argan-gold/60 focus:border-argan-gold text-lg" />
+          <ErrorMessage name="addressLine2" class="text-red-600 text-sm mt-1" />
         </div>
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label class="block text-sm font-medium text-gray-700">Ville</label>
-            <input v-model="form.city" type="text" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
-       px-4 h-10 text-gray-900 placeholder-gray-400
-       caret-argan-gold focus:outline-none focus:ring-2
-       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
+            <Field name="city" as="input" type="text" autocomplete="address-level2" class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+                     px-4 h-10 text-gray-900 placeholder-gray-400
+                     caret-argan-gold focus:outline-none focus:ring-2
+                     focus:ring-argan-gold/60 focus:border-argan-gold text-lg" />
+            <ErrorMessage name="city" class="text-red-600 text-sm mt-1" />
           </div>
+
           <div>
             <label class="block text-sm font-medium text-gray-700">Code postal</label>
-            <input v-model="form.postalCode" type="text" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
-       px-4 h-10 text-gray-900 placeholder-gray-400
-       caret-argan-gold focus:outline-none focus:ring-2
-       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
+            <Field name="postalCode" as="input" type="text" inputmode="numeric" autocomplete="postal-code" class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+                     px-4 h-10 text-gray-900 placeholder-gray-400
+                     caret-argan-gold focus:outline-none focus:ring-2
+                     focus:ring-argan-gold/60 focus:border-argan-gold text-lg" />
+            <ErrorMessage name="postalCode" class="text-red-600 text-sm mt-1" />
           </div>
+
           <div>
             <label class="block text-sm font-medium text-gray-700">Pays</label>
-            <input v-model="form.country" type="text" required class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
-       px-4 h-10 text-gray-900 placeholder-gray-400
-       caret-argan-gold focus:outline-none focus:ring-2
-       focus:ring-argan-gold/60 focus:border-argan-gold text-lg">
+            <Field name="country" as="input" type="text" autocomplete="country-name" class="mt-1 block w-full rounded-lg border border-gray-300 bg-white
+                     px-4 h-10 text-gray-900 placeholder-gray-400
+                     caret-argan-gold focus:outline-none focus:ring-2
+                     focus:ring-argan-gold/60 focus:border-argan-gold text-lg" />
+            <ErrorMessage name="country" class="text-red-600 text-sm mt-1" />
           </div>
         </div>
 
@@ -84,11 +104,11 @@
 
         <div v-if="errorMessage" class="text-red-600 mb-2">{{ errorMessage }}</div>
 
-        <button type="submit" :disabled="isLoading"
+        <button type="submit" :disabled="isSubmitting || !meta.valid || cart.items.length === 0"
           class="bg-argan-gold hover:bg-argan-dark text-white px-6 py-3 rounded-full transition w-full disabled:opacity-50 disabled:cursor-not-allowed">
-          {{ isLoading ? 'Validation...' : 'Payer ma commande' }}
+          {{ isSubmitting ? 'Validation...' : 'Payer ma commande' }}
         </button>
-      </form>
+      </Form>
     </div>
   </section>
 </template>
@@ -97,102 +117,118 @@
 import { ref, computed } from "vue"
 import { useCartStore } from "~/stores/cart"
 import { useProductsStore } from "~/stores/products"
-import { useNotificationStore } from "~/stores/notifications"
+
+import AddressAutocomplete from "@/components/AdressAutocomplete.vue"
+
+import { Form, Field, ErrorMessage, type SubmissionHandler } from "vee-validate"
+import { toTypedSchema } from "@vee-validate/zod"
+import { z } from "zod"
 
 const cart = useCartStore()
 const productsStore = useProductsStore()
-const notifications = useNotificationStore()
 
-const form = ref({
-  fullName: "",
-  addressLine1: "",
-  addressLine2: "",
-  city: "",
-  postalCode: "",
-  country: "",
-  email: "",
+// 1) Déclare le schéma Zod "brut"
+const rawSchema = z.object({
+	fullName: z.string().trim().min(2, "Veuillez saisir votre nom complet"),
+	email: z.string().trim().email("Email invalide"),
+	addressLine1: z.string().trim().min(5, "Adresse requise"),
+	addressLine2: z.string().trim().optional().or(z.literal("")),
+	city: z.string().trim().min(2, "Ville requise"),
+	postalCode: z
+		.string()
+		.trim()
+		.regex(/^\d{5}$/, "Code postal (FR) à 5 chiffres"),
+	country: z.string().trim().min(2, "Pays requis"),
 })
 
-const isLoading = ref(false)
+// 2) Typage des valeurs du formulaire à partir du schéma
+type CheckoutValues = z.infer<typeof rawSchema>
+
+// 3) Schéma pour Vee-Validate
+const schema = toTypedSchema(rawSchema)
+
+// État initial
+const form = ref<CheckoutValues>({
+	fullName: "",
+	addressLine1: "",
+	addressLine2: "",
+	city: "",
+	postalCode: "",
+	country: "France",
+	email: "",
+})
+
+const isSubmitting = ref(false)
 const errorMessage = ref("")
 
 function formatPrice(price: number) {
-  return price.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })
+	return price.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })
 }
 
-// Charger les produits (SSR-friendly)
 await productsStore.fetchProducts()
 
-// Réhydrate chaque ligne avec les méta produits
 const detailedItems = computed(() =>
-  cart.items.map((li) => {
-    const p = productsStore.getById(li.productId)
-    return {
-      productId: li.productId,
-      quantity: li.quantity,
-      name: p?.name ?? "Produit",
-      image: p?.image ?? "",
-      price: p?.price ?? 0,
-    }
-  }),
+	cart.items.map((li) => {
+		const p = productsStore.getById(li.productId)
+		return {
+			productId: li.productId,
+			quantity: li.quantity,
+			name: p?.name ?? "Produit",
+			image: p?.image ?? "",
+			price: p?.price ?? 0,
+		}
+	}),
 )
 
 const total = computed(() => detailedItems.value.reduce((s, it) => s + it.price * it.quantity, 0))
 
-async function submitOrder() {
-  isLoading.value = true
-  errorMessage.value = ""
+// 4) Handler typé correctement pour <Form @submit>
+const onSubmit = async (values: CheckoutValues, _actions?: unknown) => {
+	isSubmitting.value = true
+	errorMessage.value = ""
 
-  // 1) Créer la commande (serveur doit revalider les prix)
-  const itemsPayload = detailedItems.value.map((it) => ({
-    productId: it.productId,
-    quantity: it.quantity,
-    price: it.price, // facultatif: le serveur doit recalculer de toute façon
-  }))
+	try {
+		const itemsPayload = detailedItems.value.map((it) => ({
+			productId: it.productId,
+			quantity: it.quantity,
+			price: it.price,
+		}))
 
-  const orderRes = await $fetch("/api/orders/orders", {
-    method: "POST",
-    body: {
-      items: itemsPayload,
-      ...form.value,
-    },
-  }).catch(() => {
-    isLoading.value = false
-    errorMessage.value = "Erreur lors de la création de la commande"
-    return null
-  })
+		const orderRes = await $fetch("/api/orders/orders", {
+			method: "POST",
+			body: {
+				items: itemsPayload,
+				...values,
+			},
+		})
 
-  if (!orderRes?.order?.id) {
-    errorMessage.value = "Création de commande impossible"
-    isLoading.value = false
-    return
-  }
+		if (!orderRes?.order?.id) {
+			throw new Error("Création de commande impossible")
+		}
 
-  // 2) Créer la session Stripe
-  const stripeRes = await $fetch("/api/payments/checkout", {
-    method: "POST",
-    body: {
-      cart: detailedItems.value.map((it) => ({
-        id: it.productId,
-        name: it.name,
-        price: it.price,
-        quantity: it.quantity,
-      })),
-      email: form.value.email,
-      orderId: orderRes.order.id,
-    },
-  }).catch(() => {
-    isLoading.value = false
-    errorMessage.value = "Erreur lors de la création du paiement Stripe"
-    return null
-  })
+		const stripeRes = await $fetch("/api/payments/checkout", {
+			method: "POST",
+			body: {
+				cart: detailedItems.value.map((it) => ({
+					id: it.productId,
+					name: it.name,
+					price: it.price,
+					quantity: it.quantity,
+				})),
+				email: values.email,
+				orderId: orderRes.order.id,
+			},
+		})
 
-  if (!stripeRes?.url) {
-    errorMessage.value = "Impossible de créer la session de paiement"
-    isLoading.value = false
-    return
-  }
+		if (!stripeRes?.url) {
+			throw new Error("Impossible de créer la session de paiement")
+		}
 
-  window.location.href = stripeRes.url
+		window.location.href = stripeRes.url
+	} catch (e: any) {
+		errorMessage.value = e?.message || "Une erreur est survenue"
+	} finally {
+		isSubmitting.value = false
+	}
 }
 </script>
