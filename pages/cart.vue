@@ -43,7 +43,13 @@
         <div class="font-serif text-xl text-argan-dark mb-4 md:mb-0">
           Total : <span class="font-bold text-argan-gold">{{ formatPrice(total) }}</span>
         </div>
-        <div class="flex gap-4">
+        <div class="flex gap-4 flex-wrap justify-center">
+          <!-- Bouton continuer -->
+          <NuxtLink to="/products"
+            class="bg-white border border-argan-gold hover:bg-argan-light text-argan-dark px-6 py-3 rounded-full transition font-medium flex items-center gap-2">
+            <i class="fas fa-arrow-left"></i>
+            Continuer mes achats
+          </NuxtLink>
           <button @click="checkout"
             class="bg-argan-gold hover:bg-argan-dark text-white px-6 py-3 cursor-pointer rounded-full transition font-medium flex items-center gap-2">
             <i class="fas fa-credit-card"></i>
@@ -77,43 +83,43 @@ await products.fetchProducts()
 
 // Réhydrate chaque ligne du panier avec les métadonnées produit “fraîches”
 const detailedItems = computed(() =>
-	cart.items.map((li) => {
-		const p = products.getById(li.productId)
-		return {
-			productId: li.productId,
-			quantity: li.quantity,
-			name: p?.name ?? "Produit",
-			image: p?.image ?? "",
-			price: p?.price ?? 0,
-		}
-	}),
+  cart.items.map((li) => {
+    const p = products.getById(li.productId)
+    return {
+      productId: li.productId,
+      quantity: li.quantity,
+      name: p?.name ?? "Produit",
+      image: p?.image ?? "",
+      price: p?.price ?? 0,
+    }
+  }),
 )
 
 const total = computed(() => detailedItems.value.reduce((s, it) => s + it.price * it.quantity, 0))
 
 function formatPrice(price: number) {
-	return price.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })
+  return price.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })
 }
 function increase(item: { productId: string; quantity: number; name: string }) {
-	cart.updateQuantity(item.productId, item.quantity + 1)
-	notifications.showToast(`Quantité augmentée : ${item.name}`, "info")
+  cart.updateQuantity(item.productId, item.quantity + 1)
+  notifications.showToast(`Quantité augmentée : ${item.name}`, "info")
 }
 function decrease(item: { productId: string; quantity: number; name: string }) {
-	if (item.quantity > 1) {
-		cart.updateQuantity(item.productId, item.quantity - 1)
-		notifications.showToast(`Quantité diminuée : ${item.name}`, "info")
-	}
+  if (item.quantity > 1) {
+    cart.updateQuantity(item.productId, item.quantity - 1)
+    notifications.showToast(`Quantité diminuée : ${item.name}`, "info")
+  }
 }
 function remove(item: { productId: string; name: string }) {
-	cart.removeFromCart(item.productId)
-	notifications.showToast(`${item.name} retiré du panier`, "warning")
+  cart.removeFromCart(item.productId)
+  notifications.showToast(`${item.name} retiré du panier`, "warning")
 }
 function clear() {
-	cart.clearCart()
-	notifications.showToast("Panier vidé", "warning")
+  cart.clearCart()
+  notifications.showToast("Panier vidé", "warning")
 }
 function checkout() {
-	notifications.showToast("Veuillez renseigner vos infos pour finaliser la commande.", "info")
-	router.push("/checkout")
+  notifications.showToast("Veuillez renseigner vos infos pour finaliser la commande.", "info")
+  router.push("/checkout")
 }
 </script>
