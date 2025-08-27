@@ -11,6 +11,7 @@
     </div>
 
     <div v-else v-inview class="reveal reveal-down">
+      <!-- vee-validate v5 sait consommer directement le schéma Zod -->
       <Form :validation-schema="schema" :initial-values="form" @submit="(values) => onSubmit(values as CheckoutValues)"
         v-slot="{ errors, meta, setFieldValue }" class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -120,15 +121,14 @@ import { useProductsStore } from "~/stores/products"
 
 import AddressAutocomplete from "@/components/AdressAutocomplete.vue"
 
-import { Form, Field, ErrorMessage, type SubmissionHandler } from "vee-validate"
-import { toTypedSchema } from "@vee-validate/zod"
+import { Form, Field, ErrorMessage } from "vee-validate"
 import { z } from "zod"
 
 const cart = useCartStore()
 const productsStore = useProductsStore()
 
-// 1) Déclare le schéma Zod "brut"
-const rawSchema = z.object({
+// Schéma Zod (consommé directement par vee-validate v5)
+const schema = z.object({
 	fullName: z.string().trim().min(2, "Veuillez saisir votre nom complet"),
 	email: z.string().trim().email("Email invalide"),
 	addressLine1: z.string().trim().min(5, "Adresse requise"),
@@ -141,11 +141,8 @@ const rawSchema = z.object({
 	country: z.string().trim().min(2, "Pays requis"),
 })
 
-// 2) Typage des valeurs du formulaire à partir du schéma
-type CheckoutValues = z.infer<typeof rawSchema>
-
-// 3) Schéma pour Vee-Validate
-const schema = toTypedSchema(rawSchema)
+// Type des valeurs du formulaire dérivé du schéma
+type CheckoutValues = z.infer<typeof schema>
 
 // État initial
 const form = ref<CheckoutValues>({
@@ -165,8 +162,10 @@ function formatPrice(price: number) {
 	return price.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })
 }
 
+// Charger les produits (SSR-friendly)
 await productsStore.fetchProducts()
 
+// Réhydrate chaque ligne avec les méta produits
 const detailedItems = computed(() =>
 	cart.items.map((li) => {
 		const p = productsStore.getById(li.productId)
@@ -182,8 +181,8 @@ const detailedItems = computed(() =>
 
 const total = computed(() => detailedItems.value.reduce((s, it) => s + it.price * it.quantity, 0))
 
-// 4) Handler typé correctement pour <Form @submit>
-const onSubmit = async (values: CheckoutValues, _actions?: unknown) => {
+// Submit
+const onSubmit = async (values: CheckoutValues) => {
 	isSubmitting.value = true
 	errorMessage.value = ""
 

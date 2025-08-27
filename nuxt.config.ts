@@ -6,6 +6,8 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			siteUrl: process.env.NUXT_PUBLIC_SITE_URL || "http://localhost:3000",
+			cloudinaryBase:
+				process.env.PUBLIC_CLOUDINARY_BASE || "https://res.cloudinary.com/ds9jvhokr/image/upload/",
 		},
 	},
 	nitro: {
@@ -24,7 +26,8 @@ export default defineNuxtConfig({
 	image: {
 		provider: "cloudinary",
 		cloudinary: {
-			baseURL: "https://res.cloudinary.com/ds9jvhokr/image/upload/",
+			baseURL:
+				process.env.PUBLIC_CLOUDINARY_BASE || "https://res.cloudinary.com/ds9jvhokr/image/upload/",
 		},
 	},
 	modules: [

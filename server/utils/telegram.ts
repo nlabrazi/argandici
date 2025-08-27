@@ -27,7 +27,7 @@ export function buildTelegramOrderMessage(order: any) {
 		.map((item: any) => {
 			const unit = Number(item.unitPrice ?? item.product.price ?? 0)
 			const lineTotal = (unit * item.quantity).toFixed(2)
-			return `🛒 <b>${item.quantity} x ${item.product.name}</b> — ${lineTotal} €`
+			return `🧴 <b>${item.quantity} x ${item.product.name}</b> — ${lineTotal} €`
 		})
 		.join("\n")
 

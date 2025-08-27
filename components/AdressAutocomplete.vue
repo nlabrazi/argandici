@@ -29,67 +29,67 @@ import { ref, onMounted, onBeforeUnmount, computed } from "vue"
 import { useAdresseApi } from "@/server/utils/useAdresseApi"
 
 type SelectedAddress = {
-  line1: string
-  city: string
-  postalCode: string
-  country: string
+	line1: string
+	city: string
+	postalCode: string
+	country: string
 }
 
 const props = defineProps<{
-  modelValue: string
-  placeholder?: string
-  listId?: string
+	modelValue: string
+	placeholder?: string
+	listId?: string
 }>()
 const emit = defineEmits<{
-  "update:modelValue": [value: string]
-  select: [addr: SelectedAddress]
+	"update:modelValue": [value: string]
+	select: [addr: SelectedAddress]
 }>()
 
 const { query, loading, results, open, highlighted, hasResults, onInput, close, move } =
-  useAdresseApi()
+	useAdresseApi()
 
 const listId = computed(() => props.listId || "adresse-listbox")
 const activeId = computed(() =>
-  hasResults.value && highlighted.value >= 0
-    ? `${listId.value}-opt-${highlighted.value}`
-    : undefined,
+	hasResults.value && highlighted.value >= 0
+		? `${listId.value}-opt-${highlighted.value}`
+		: undefined,
 )
 
 const root = ref<HTMLElement | null>(null)
 
 function handleInput(e: Event) {
-  const v = (e.target as HTMLInputElement).value
-  emit("update:modelValue", v)
-  onInput(v)
+	const v = (e.target as HTMLInputElement).value
+	emit("update:modelValue", v)
+	onInput(v)
 }
 
 function onFocus() {
-  if (props.modelValue?.length >= 3) {
-    onInput(props.modelValue)
-  }
+	if (props.modelValue?.length >= 3) {
+		onInput(props.modelValue)
+	}
 }
 
 function onKeyDown(delta: number) {
-  if (!open.value) onInput(props.modelValue || "")
-  move(delta)
+	if (!open.value) onInput(props.modelValue || "")
+	move(delta)
 }
 
 function select(s: SelectedAddress) {
-  emit("update:modelValue", s.line1)
-  emit("select", s)
-  close()
+	emit("update:modelValue", s.line1)
+	emit("select", s)
+	close()
 }
 
 function onClickOutside(ev: MouseEvent) {
-  if (!root.value) return
-  if (!root.value.contains(ev.target as Node)) close()
+	if (!root.value) return
+	if (!root.value.contains(ev.target as Node)) close()
 }
 
 onMounted(() => document.addEventListener("mousedown", onClickOutside))
 onBeforeUnmount(() => document.removeEventListener("mousedown", onClickOutside))
 
 watchEffect(() => {
-  query.value = props.modelValue || ""
+	query.value = props.modelValue || ""
 })
 
 const highlightedRef = highlighted
