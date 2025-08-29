@@ -25,7 +25,8 @@
     </div>
 
     <!-- Liste produits -->
-    <div v-if="!isLoading && filteredProducts.length" class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <div v-if="!isLoading && filteredProducts.length" v-inview
+      class="reveal reveal-down grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       <NuxtLink v-for="product in filteredProducts" :key="product.id" :to="`/products/${product.id}`"
         class="bg-white rounded-2xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] cursor-pointer group">
         <div class="relative">
@@ -72,25 +73,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useProductsStore } from '~/stores/products'
+import { ref, computed, onMounted } from "vue"
+import { useProductsStore } from "~/stores/products"
 
-const categories = ['Tous', 'Cosmétique', 'Alimentaire', 'Soins']
-const selectedCategory = ref('Tous')
+const categories = ["Tous", "Cosmétique", "Alimentaire", "Soins"]
+const selectedCategory = ref("Tous")
 const isLoading = ref(true)
 
 const productsStore = useProductsStore()
 const filteredProducts = computed(() => {
-  if (selectedCategory.value === 'Tous') return productsStore.products
-  return productsStore.products.filter(p => p.category === selectedCategory.value)
+	if (selectedCategory.value === "Tous") return productsStore.products
+	return productsStore.products.filter((p) => p.category === selectedCategory.value)
 })
 
 function filterByCategory(category: string) {
-  selectedCategory.value = category
+	selectedCategory.value = category
 }
 
 onMounted(async () => {
-  await productsStore.fetchProducts()
-  isLoading.value = false
+	await productsStore.fetchProducts()
+	isLoading.value = false
 })
 </script>

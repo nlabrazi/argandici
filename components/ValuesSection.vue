@@ -9,7 +9,7 @@
         </p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div class="text-center p-6">
+        <div v-inview class="reveal reveal-down text-center p-6">
           <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
             <!-- Icône de certification -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-10 h-10 mx-auto fill-argan-gold">
@@ -22,7 +22,7 @@
             Extraction à froid sans additifs ni conservateurs
           </p>
         </div>
-        <div class="text-center p-6">
+        <div v-inview class="reveal reveal-down text-center p-6">
           <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
             <!-- Icône de traçabilité -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="w-10 h-10 mx-auto fill-argan-gold">
@@ -35,7 +35,7 @@
             Provenance garantie du Sud-Ouest marocain
           </p>
         </div>
-        <div class="text-center p-6">
+        <div v-inview class="reveal reveal-down text-center p-6">
           <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
             <!-- Icône d'éthique -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-10 h-10 mx-auto fill-argan-gold">
