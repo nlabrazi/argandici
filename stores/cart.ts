@@ -1,4 +1,3 @@
-// stores/cart.ts
 import { defineStore } from "pinia"
 
 export interface CartLine {

@@ -1,5 +1,3 @@
-// server/utils/telegram.ts
-
 export async function sendTelegramMessage(text: string) {
 	const token = process.env.TELEGRAM_BOT_TOKEN
 	const chatId = process.env.TELEGRAM_CHAT_ID
@@ -21,7 +19,6 @@ export async function sendTelegramMessage(text: string) {
 	}
 }
 
-// Beau message façon NestJS (simple, sans typage strict)
 export function buildTelegramOrderMessage(order: any) {
 	const itemsText = order.orderItems
 		.map((item: any) => {

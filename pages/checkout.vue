@@ -11,6 +11,7 @@
     </div>
 
     <div v-else v-inview class="reveal reveal-down">
+
       <!-- vee-validate v5 sait consommer directement le schéma Zod -->
       <Form :validation-schema="schema" :initial-values="form" @submit="(values) => onSubmit(values as CheckoutValues)"
         v-slot="{ errors, meta, setFieldValue }" class="space-y-6">
@@ -127,7 +128,6 @@ import { z } from "zod"
 const cart = useCartStore()
 const productsStore = useProductsStore()
 
-// Schéma Zod (consommé directement par vee-validate v5)
 const schema = z.object({
 	fullName: z.string().trim().min(2, "Veuillez saisir votre nom complet"),
 	email: z.string().trim().email("Email invalide"),
@@ -141,10 +141,8 @@ const schema = z.object({
 	country: z.string().trim().min(2, "Pays requis"),
 })
 
-// Type des valeurs du formulaire dérivé du schéma
 type CheckoutValues = z.infer<typeof schema>
 
-// État initial
 const form = ref<CheckoutValues>({
 	fullName: "",
 	addressLine1: "",
@@ -162,10 +160,8 @@ function formatPrice(price: number) {
 	return price.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })
 }
 
-// Charger les produits (SSR-friendly)
 await productsStore.fetchProducts()
 
-// Réhydrate chaque ligne avec les méta produits
 const detailedItems = computed(() =>
 	cart.items.map((li) => {
 		const p = productsStore.getById(li.productId)
@@ -181,7 +177,6 @@ const detailedItems = computed(() =>
 
 const total = computed(() => detailedItems.value.reduce((s, it) => s + it.price * it.quantity, 0))
 
-// Submit
 const onSubmit = async (values: CheckoutValues) => {
 	isSubmitting.value = true
 	errorMessage.value = ""

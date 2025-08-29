@@ -16,7 +16,6 @@ export default defineEventHandler(async (event) => {
 		throw createError({ statusCode: 400, statusMessage: "orderId manquant" })
 	}
 
-	// 1) Charger la commande + items
 	const order = await prisma.order.findUnique({
 		where: { id: orderId },
 		include: { orderItems: { include: { product: true } } },
@@ -28,11 +27,10 @@ export default defineEventHandler(async (event) => {
 		throw createError({ statusCode: 400, statusMessage: "La commande ne contient aucun article" })
 	}
 
-	// 2) Construire line_items pour Stripe (en centimes)
 	const currency = "eur"
 	const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = order.orderItems.map((oi) => {
 		const unit = Number(oi.unitPrice ?? oi.product.price ?? 0)
-		const unit_amount = Math.round(unit * 100) // euros -> centimes
+		const unit_amount = Math.round(unit * 100)
 		return {
 			quantity: oi.quantity,
 			price_data: {
@@ -43,7 +41,6 @@ export default defineEventHandler(async (event) => {
 		}
 	})
 
-	// 3) Créer la checkout session
 	const session = await stripe.checkout.sessions.create({
 		mode: "payment",
 		metadata: { orderId },

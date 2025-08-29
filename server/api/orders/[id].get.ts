@@ -1,4 +1,3 @@
-// server/api/orders/[id].get.ts
 import { defineEventHandler, createError } from "h3"
 import { prisma } from "~/server/prisma/client"
 
@@ -14,18 +13,17 @@ export default defineEventHandler(async (event) => {
 
 	return {
 		id: order.id,
-		status: order.status, // PENDING | PAID | ...
+		status: order.status,
 		shippingStatus: order.shippingStatus,
 		total: order.total,
 		email: order.email,
 		fullName: order.fullName,
 		createdAt: order.date,
-		invoiceUrl: order.invoiceUrl ?? null, // si tu as ajouté ce champ
+		invoiceUrl: order.invoiceUrl ?? null,
 		items: order.orderItems.map((oi) => ({
 			name: oi.product.name,
 			quantity: oi.quantity,
 			price: oi.product.price,
 		})),
-		// plus tard : invoiceUrl si tu ajoutes un champ en BDD
 	}
 })

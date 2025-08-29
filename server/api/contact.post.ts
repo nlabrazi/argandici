@@ -5,7 +5,6 @@ export default defineEventHandler(async (event) => {
 
 	const { name, email, subject, message } = body
 
-	// Basic validation
 	if (
 		!name ||
 		!email ||
@@ -19,7 +18,6 @@ export default defineEventHandler(async (event) => {
 		throw createError({ statusCode: 400, statusMessage: "Données invalides" })
 	}
 
-	// Envoi des emails
 	await sendContactNotification({ name, email, subject, message })
 	await sendContactConfirmation({ name, email, subject, message })
 

@@ -55,7 +55,7 @@ const notifications = useNotificationStore()
 const state = ref<State>("loading")
 const email = ref<string | null>(null)
 const orderId = ref<string | null>((route.query.order_id as string) || null)
-const orderTotal = ref<number | null>(null) // cents
+const orderTotal = ref<number | null>(null)
 const currency = ref<string>("eur")
 
 function formatCents(amount: number | null, currency: string) {
@@ -66,7 +66,6 @@ function formatCents(amount: number | null, currency: string) {
 async function pollOrderPaid(id: string, tries = 8) {
 	for (let i = 0; i < tries; i++) {
 		try {
-			// ✅ Corrigé: pas de doublon "orders"
 			const res = await $fetch<{ status: string }>(`/api/orders/${id}`)
 			if (res.status === "PAID") return true
 		} catch {}

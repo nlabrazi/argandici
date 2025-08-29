@@ -1,4 +1,3 @@
-// server/api/health/mailgun.post.ts
 import { defineEventHandler, readBody, createError } from "h3"
 import { sendOrderEmailWithInvoice } from "~/server/utils/mailService"
 
@@ -15,7 +14,6 @@ export default defineEventHandler(async (event) => {
 		})
 		return { ok: true, id: (res as any)?.id ?? null }
 	} catch (e: any) {
-		// On renvoie un maximum d'info pour debug
 		const status = e?.status || 500
 		const message = e?.message || "Mailgun error"
 		const details = e?.details

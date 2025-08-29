@@ -1,4 +1,3 @@
-// stores/products.ts
 import { defineStore } from "pinia"
 
 export interface Product {
@@ -9,7 +8,6 @@ export interface Product {
 	category: string
 	image: string
 	stock: number
-	// Optionnel si tu ajoutes ça en BDD plus tard :
 	images?: string[]
 	details?: string
 	benefits?: string[]

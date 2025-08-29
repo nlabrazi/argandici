@@ -1,6 +1,5 @@
 import PDFDocument from "pdfkit"
 
-// Génération buffer PDF en mémoire
 export async function generateOrderInvoicePdf(order: any): Promise<Buffer> {
 	return new Promise((resolve, reject) => {
 		const doc = new PDFDocument({ size: "A4", margin: 40 })
@@ -36,7 +35,6 @@ export async function generateOrderInvoicePdf(order: any): Promise<Buffer> {
 	})
 }
 
-// Upload sur Supabase
 import { createClient } from "@supabase/supabase-js"
 
 export async function uploadInvoiceToSupabase(orderId: string, pdfBuffer: Buffer): Promise<string> {

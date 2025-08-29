@@ -25,7 +25,6 @@ export default defineEventHandler(async (event) => {
 	const products = await prisma.product.findMany({ where: { id: { in: productIds } } })
 	const total = items.reduce((acc, i) => acc + i.price * i.quantity, 0)
 
-	// Compose lignes “propres” (unitPrice = prix officiel BDD)
 	const lines = items.map((i) => {
 		const p = products.find((x) => x.id === i.productId)
 		if (!p) throw createError({ statusCode: 400, statusMessage: `Produit inconnu: ${i.productId}` })

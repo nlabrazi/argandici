@@ -1,4 +1,3 @@
-<!-- pages/orders/[id].vue -->
 <template>
   <section class="max-w-3xl mx-auto py-12 px-4 md:px-8">
     <div class="text-center mb-8">
@@ -86,8 +85,6 @@ import { useRoute } from "vue-router"
 const route = useRoute()
 const id = route.params.id as string
 
-// Récupération SSR-friendly (+ refetch côté client)
-// 1) Type de retour de l'API
 type OrderView = {
 	id: string
 	status: "PENDING" | "PAID" | "SHIPPED" | "DELIVERED" | "CANCELLED" | "REFUNDED"
@@ -100,13 +97,11 @@ type OrderView = {
 	items: { name: string; quantity: number; price: number }[]
 }
 
-// 2) Construire une URL ABSOLUE (évite le bug d'inférence)
 const {
 	public: { siteUrl },
 } = useRuntimeConfig()
 const endpoint = `${siteUrl.replace(/\/$/, "")}/api/orders/${id}`
 
-// 3) Appel data avec typage explicite
 const { data, pending, error, refresh } = await useAsyncData<OrderView>(
 	`order-${id}`,
 	() => $fetch<OrderView>(endpoint),
@@ -128,15 +123,13 @@ const order = computed(
 		},
 )
 
-// (Option) petit rafraîchissement du statut côté client
 if (process.client) {
 	setTimeout(() => refresh(), 2000)
-	// puis éventuellement toutes les 30s si statut < DELIVERED
 	const int = setInterval(() => {
 		const s = order.value?.shippingStatus
 		if (!s || s === "DELIVERED" || s === "CANCELLED") return clearInterval(int)
 		refresh()
-	}, 30000)
+	}, 60000)
 }
 
 function formatPrice(x: number) {
@@ -201,6 +194,4 @@ function badgeShipClass(s: string) {
 }
 </script>
 
-<style scoped>
-/* rien de spécial, Tailwind gère déjà l’esthétique */
-</style>
+<style scoped></style>

@@ -19,7 +19,6 @@ export default defineNuxtPlugin((nuxtApp) => {
 			)
 
 			io.observe(el)
-			// @ts-ignore
 			el.__io = io
 		},
 		beforeUnmount(el: any) {

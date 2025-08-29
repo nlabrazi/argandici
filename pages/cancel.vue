@@ -29,6 +29,4 @@
 </template>
 
 <script setup lang="ts">
-// Pas de logique complexe ici, c’est une page purement informative.
-// On peut ajouter un clearCart() si besoin, mais Stripe ne débite pas en cas d'annulation.
 </script>

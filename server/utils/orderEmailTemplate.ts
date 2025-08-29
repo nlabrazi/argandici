@@ -1,8 +1,6 @@
-// server/utils/orderEmailTemplate.ts
 import { getTrackingUrl } from "~/server/utils/carrier-tracking"
 
 export function generateOrderEmailHtml(order: any): string {
-	// Évite le type 'unknown' et normalise les slashes
 	const runtime = useRuntimeConfig()
 	const base = String(runtime.public?.siteUrl ?? "").replace(/\/$/, "")
 	const cdn = String(runtime.public?.cloudinaryBase ?? "").replace(/\/$/, "") + "/"

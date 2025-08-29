@@ -1,10 +1,12 @@
 <template>
   <nav class="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between sticky top-0 z-50">
+
     <!-- Logo -->
     <NuxtLink to="/" class="flex items-center gap-2 cursor-pointer hover:underline hover:text-argan-gold">
       <NuxtImg src="logo.png" alt="Logo" class="h-8 w-8 rounded-full" provider="cloudinary" />
       <span class="text-xl font-bold text-primary">Argan d'ici</span>
     </NuxtLink>
+
     <!-- Desktop menu -->
     <ul class="hidden md:flex gap-6 items-center font-medium cursor-pointer">
       <li>
@@ -28,6 +30,7 @@
           class="hover:text-secondary hover:underline hover:text-argan-gold transition">Contact</NuxtLink>
       </li>
     </ul>
+
     <!-- Cart Icon -->
     <NuxtLink to="/cart" class="relative hover:text-argan-gold transition ml-4 md:ml-0" aria-label="Panier">
       <i class="fas fa-shopping-cart text-xl"></i>
@@ -36,12 +39,14 @@
         {{ count }}
       </span>
     </NuxtLink>
+
     <!-- Mobile menu button -->
     <button @click="toggleMenu" class="md:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-primary"
       aria-label="Menu">
       <span v-if="!menuOpen">☰</span>
       <span v-else>✕</span>
     </button>
+
     <!-- Mobile menu -->
     <ul v-if="menuOpen" class="absolute left-0 top-full w-full bg-white shadow-lg md:hidden flex flex-col py-2 z-50">
       <li>
@@ -68,7 +73,6 @@ import { ref } from "vue"
 import { storeToRefs } from "pinia"
 import { useCartStore } from "~/stores/cart"
 
-// Menu mobile
 const menuOpen = ref(false)
 function toggleMenu() {
 	menuOpen.value = !menuOpen.value
@@ -77,7 +81,6 @@ function closeMenu() {
 	menuOpen.value = false
 }
 
-// Panier (Pinia)
 const cart = useCartStore()
 const { count } = storeToRefs(cart)
 </script>

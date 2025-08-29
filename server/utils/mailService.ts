@@ -1,18 +1,14 @@
-// server/utils/mailService.ts
 import Mailgun from "mailgun.js"
 import formData from "form-data"
 
-// ── ENV ──────────────────────────────────────────────────────────────────────
 const apiKey = process.env.MAILGUN_API_KEY
-const domain = process.env.MAILGUN_DOMAIN // ex: mg.argandici.com ou sandboxxxxx.mailgun.org
-const fromEmail = process.env.MAILGUN_FROM ?? (domain ? `postmaster@${domain}` : undefined) // fallback propre
+const domain = process.env.MAILGUN_DOMAIN
+const fromEmail = process.env.MAILGUN_FROM ?? (domain ? `postmaster@${domain}` : undefined)
 const contactRecipient = process.env.CONTACT_RECIPIENT ?? "contact@argandici.com"
 
-// Région : EU => api.eu.mailgun.net, US => api.mailgun.net (par défaut EU)
 const region = (process.env.MAILGUN_REGION || "EU").toUpperCase()
 const baseUrl = region === "US" ? "https://api.mailgun.net" : "https://api.eu.mailgun.net"
 
-// ── CLIENT ───────────────────────────────────────────────────────────────────
 const mailgun = new Mailgun(formData)
 const mgClient =
 	apiKey && domain ? mailgun.client({ username: "api", key: apiKey, url: baseUrl }) : null
@@ -24,7 +20,6 @@ function requireMailgun() {
 	if (!mgClient) throw new Error("Mailgun client not initialized")
 }
 
-// Envoi avec logs d’erreur détaillés (status, body renvoyé par Mailgun, etc.)
 async function sendWithLogs(msg: any) {
 	requireMailgun()
 	try {
@@ -49,8 +44,6 @@ async function sendWithLogs(msg: any) {
 	}
 }
 
-// ── API PUBLIQUE ─────────────────────────────────────────────────────────────
-// ✅ Notification interne “contact”
 export async function sendContactNotification({
 	name,
 	email,
@@ -77,12 +70,10 @@ export async function sendContactNotification({
 		html,
 	} as any)
 
-	// 👇 ton log d'origine rétabli
 	console.log(`📧 Notification de contact envoyée à ${contactRecipient}`)
 	return res
 }
 
-// ✅ Accusé de réception “contact” au client
 export async function sendContactConfirmation({
 	name,
 	email,
@@ -110,12 +101,10 @@ export async function sendContactConfirmation({
 		html,
 	} as any)
 
-	// 👇 ton log d'origine rétabli
 	console.log(`📧 Confirmation de contact envoyée à ${email}`)
 	return res
 }
 
-// ✅ Email commande unique (template HTML) + PJ PDF optionnelle
 export async function sendOrderEmailWithInvoice({
 	to,
 	subject,
@@ -141,7 +130,6 @@ export async function sendOrderEmailWithInvoice({
 
 	const res = await sendWithLogs(msg)
 
-	// 👇 ton log d'origine rétabli
 	console.log(`📧 Order email sent to ${to}`)
 	return res
 }

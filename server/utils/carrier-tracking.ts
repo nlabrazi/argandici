@@ -1,4 +1,3 @@
-// server/utils/carrier-tracking.ts
 import type { ShippingProvider } from "@prisma/client"
 
 export function getTrackingUrl(provider?: ShippingProvider | null, trackingNumber?: string | null) {

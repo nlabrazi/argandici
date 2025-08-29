@@ -1,4 +1,3 @@
-<!-- components/AddressAutocomplete.vue -->
 <template>
   <div class="relative" ref="root" @keydown.down.prevent="onKeyDown(1)" @keydown.up.prevent="onKeyDown(-1)"
     @keydown.esc.prevent="close">

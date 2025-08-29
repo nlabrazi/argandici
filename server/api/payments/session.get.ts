@@ -1,4 +1,3 @@
-// server/api/payments/session.get.ts
 import Stripe from "stripe"
 import { defineEventHandler, getQuery, createError } from "h3"
 
@@ -17,8 +16,8 @@ export default defineEventHandler(async (event) => {
 	})
 
 	return {
-		payment_status: session.payment_status, // 'paid' | 'unpaid' | 'no_payment_required'
-		amount_total: session.amount_total, // en centimes
+		payment_status: session.payment_status,
+		amount_total: session.amount_total,
 		currency: session.currency,
 		email:
 			session.customer_details?.email ?? session.customer_email ?? session.metadata?.email ?? null,

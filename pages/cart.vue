@@ -1,8 +1,6 @@
-<!-- pages/cart.vue -->
 <template>
   <section class="max-w-4xl mx-auto py-12 px-4 md:px-8">
     <h1 class="font-serif text-3xl text-argan-dark mb-8 text-center">Votre panier</h1>
-
     <!-- Panier vide -->
     <div v-if="detailedItems.length === 0" class="text-center py-24">
       <i class="fas fa-shopping-cart text-5xl text-gray-300 mb-6"></i>
@@ -12,7 +10,6 @@
         Voir la boutique
       </NuxtLink>
     </div>
-
     <!-- Panier avec produits -->
     <div v-else>
       <div v-inview class="reveal reveal-down space-y-8 mb-8">
@@ -36,7 +33,6 @@
           </div>
         </div>
       </div>
-
       <!-- Résumé -->
       <div v-inview
         class="reveal reveal-up bg-argan-light rounded-xl p-6 flex flex-col md:flex-row items-center justify-between mb-4">
@@ -78,10 +74,8 @@ const products = useProductsStore()
 const notifications = useNotificationStore()
 const router = useRouter()
 
-// Charge les produits côté SSR pour éviter tout mismatch
 await products.fetchProducts()
 
-// Réhydrate chaque ligne du panier avec les métadonnées produit “fraîches”
 const detailedItems = computed(() =>
 	cart.items.map((li) => {
 		const p = products.getById(li.productId)

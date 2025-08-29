@@ -1,4 +1,3 @@
-// server/api/webhook.post.ts
 export const config = { bodyParser: false }
 
 import Stripe from "stripe"
@@ -26,7 +25,6 @@ export default defineEventHandler(async (event) => {
 		throw createError({ statusCode: 400, statusMessage: `Webhook Error: ${err.message}` })
 	}
 
-	// Réponse immédiate à Stripe
 	event.node.res.statusCode = 200
 	event.node.res.end(JSON.stringify({ received: true }))
 
@@ -40,7 +38,6 @@ export default defineEventHandler(async (event) => {
 	}
 
 	try {
-		// 1) Charger la commande + items
 		let order = await prisma.order.findUnique({
 			where: { id: orderId },
 			include: { orderItems: { include: { product: true } } },
@@ -50,13 +47,11 @@ export default defineEventHandler(async (event) => {
 			return { received: true }
 		}
 
-		// 2) Idempotence : si déjà notifié, stop
 		if (order.postPaymentNotifiedAt) {
 			console.log(`[Stripe Webhook] Order ${orderId} already notified, skipping.`)
 			return { received: true }
 		}
 
-		// 3) Passer en PAID si pas déjà
 		if (order.status !== OrderStatus.PAID) {
 			order = await prisma.order.update({
 				where: { id: orderId },
@@ -66,7 +61,6 @@ export default defineEventHandler(async (event) => {
 			console.log(`[Stripe Webhook] Order ${orderId} set to PAID`)
 		}
 
-		// 4) Préparer PDF
 		const orderForPdf = {
 			id: order.id,
 			date: order.date,
@@ -82,7 +76,6 @@ export default defineEventHandler(async (event) => {
 		let pdfBuffer: Buffer | undefined
 		let pdfUrl: string | undefined
 
-		// 5) Générer PDF + upload (si l’upload échoue, PJ seulement)
 		try {
 			pdfBuffer = await generateOrderInvoicePdf(orderForPdf)
 			pdfUrl = await uploadInvoiceToSupabase(orderId, pdfBuffer)
@@ -92,7 +85,6 @@ export default defineEventHandler(async (event) => {
 			console.warn("[Stripe Webhook] PDF upload failed, will send as attachment only.")
 		}
 
-		// 6) Email unique (template "beau" + PJ PDF)
 		try {
 			const emailPayload = {
 				id: order.id,
@@ -116,13 +108,10 @@ export default defineEventHandler(async (event) => {
 					pdfFilename: `facture-${order.id}.pdf`,
 				})
 			}
-			// (Optionnel) copie compta :
-			// await sendOrderEmailWithInvoice({ to: 'compta@argandici.com', subject: ..., html, pdfBuffer, pdfFilename: ... })
 		} catch (e) {
 			console.error("[Stripe Webhook] Email send error:", (e as any)?.message || e)
 		}
 
-		// 7) Telegram — un seul message
 		try {
 			const msg = buildTelegramOrderMessage(order as any)
 			await sendTelegramMessage(msg)
@@ -130,7 +119,6 @@ export default defineEventHandler(async (event) => {
 			console.error("[Stripe Webhook] Telegram error:", (e as any)?.message || e)
 		}
 
-		// 8) Marquer la notif (idempotence forte)
 		await prisma.order.update({
 			where: { id: orderId },
 			data: { postPaymentNotifiedAt: new Date() },

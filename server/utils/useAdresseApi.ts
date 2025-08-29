@@ -1,13 +1,12 @@
-// composables/useAdresseApi.ts
 import { ref, watch, computed } from "vue"
 
 type Suggestion = {
 	id: string
 	label: string
-	line1: string // numéro + rue
+	line1: string
 	city: string
 	postalCode: string
-	country: string // 'France'
+	country: string
 }
 
 export function useAdresseApi() {
@@ -77,7 +76,6 @@ export function useAdresseApi() {
 	const hasResults = computed(() => open.value && results.value.length > 0)
 
 	return {
-		// state
 		query,
 		loading,
 		error,
@@ -85,7 +83,6 @@ export function useAdresseApi() {
 		open,
 		highlighted,
 		hasResults,
-		// actions
 		onInput,
 		fetchSuggestions,
 		close,
