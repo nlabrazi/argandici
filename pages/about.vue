@@ -93,45 +93,25 @@
       <h2 class="font-serif text-3xl md:text-4xl text-argan-dark mb-12 text-center">
         L'équipe Argan d'ici
       </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
         <div class="text-center">
           <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
             <NuxtImg src="avatar_h.png" alt="Avatar Homme" class="object-cover w-full h-full" provider="cloudinary" />
           </div>
-          <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
+          <h3 class="font-serif text-xl text-argan-dark mb-1">Nabil</h3>
           <p class="text-argan-gold mb-2">Fondateur & Relation Producteurs</p>
           <p class="text-gray-600 text-sm">
-            Originaire d'Essaouira, il sélectionne personnellement chaque lot d'huile.
-          </p>
-        </div>
-        <div class="text-center">
-          <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
-            <NuxtImg src="avatar_h.png" alt="Avatar Homme" class="object-cover w-full h-full" provider="cloudinary" />
-          </div>
-          <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
-          <p class="text-argan-gold mb-2">Responsable Qualité</p>
-          <p class="text-gray-600 text-sm">
-            Garantit la pureté et l'excellence de chaque flacon avant expédition.
+            Originaire du Maroc, il sélectionne personnellement chaque lot d'huile.
           </p>
         </div>
         <div class="text-center">
           <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
             <NuxtImg src="avatar_f.png" alt="Avatar Femme" class="object-cover w-full h-full" provider="cloudinary" />
           </div>
-          <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
+          <h3 class="font-serif text-xl text-argan-dark mb-1">Myriam</h3>
           <p class="text-argan-gold mb-2">Cheffe de Production</p>
           <p class="text-gray-600 text-sm">
             Supervise l'extraction et le conditionnement dans le respect des traditions.
-          </p>
-        </div>
-        <div class="text-center">
-          <div class="rounded-full w-32 h-32 mx-auto mb-4 overflow-hidden">
-            <NuxtImg src="avatar_f.png" alt="Avatar Femme" class="object-cover w-full h-full" provider="cloudinary" />
-          </div>
-          <h3 class="font-serif text-xl text-argan-dark mb-1">Name</h3>
-          <p class="text-argan-gold mb-2">Service Client</p>
-          <p class="text-gray-600 text-sm">
-            Votre interlocuteur privilégié pour toutes vos questions.
           </p>
         </div>
       </div>
@@ -143,9 +123,11 @@
         "Notre force vient de nos racines marocaines et de notre engagement français pour la qualité."
       </blockquote>
       <div class="flex items-center justify-center">
-        <div class="bg-gray-200 border-2 border-dashed rounded-full w-16 h-16 mr-4"></div>
+        <div class="bg-gray-200 border-2 border-dashed rounded-full w-16 h-16 mr-4">
+          <NuxtImg src="avatar_h.png" alt="Avatar Homme" class="object-cover w-full h-full" provider="cloudinary" />
+        </div>
         <div>
-          <p class="font-semibold">Karim & Sophie, Fondateurs</p>
+          <p class="font-semibold">Nabil</p>
           <p class="text-argan-dark/80">Argan d'ici</p>
         </div>
       </div>

@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="min-h-screen flex flex-col">
     <SiteNavbar />
-    <main>
+    <main class="flex-1">
       <slot />
     </main>
     <SiteFooter />

@@ -30,7 +30,7 @@
       <NuxtLink v-for="product in filteredProducts" :key="product.id" :to="`/products/${product.id}`"
         class="bg-white rounded-2xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] cursor-pointer group">
         <div class="relative">
-          <NuxtImg :src="product.image" :alt="product.name" class="w-full h-64 object-cover" provider="cloudinary" />
+          <NuxtImg :src="product.image" :alt="product.name" class="w-full h-64 object-contain" provider="cloudinary" />
           <div v-if="product.stock === 0"
             class="absolute top-4 right-4 bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
             Rupture de stock
@@ -82,16 +82,16 @@ const isLoading = ref(true)
 
 const productsStore = useProductsStore()
 const filteredProducts = computed(() => {
-	if (selectedCategory.value === "Tous") return productsStore.products
-	return productsStore.products.filter((p) => p.category === selectedCategory.value)
+  if (selectedCategory.value === "Tous") return productsStore.products
+  return productsStore.products.filter((p) => p.category === selectedCategory.value)
 })
 
 function filterByCategory(category: string) {
-	selectedCategory.value = category
+  selectedCategory.value = category
 }
 
 onMounted(async () => {
-	await productsStore.fetchProducts()
-	isLoading.value = false
+  await productsStore.fetchProducts()
+  isLoading.value = false
 })
 </script>

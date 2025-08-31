@@ -23,11 +23,10 @@
               des hommes et de la nature"
             </blockquote>
             <div class="flex items-center">
-              <NuxtImg src="avatar_f.png" alt="Fatima Zahra" class="w-12 h-12 rounded-full mr-4"
-                provider="cloudinary" />
+              <NuxtImg src="avatar_h.png" alt="Hassan" class="w-12 h-12 rounded-full mr-4" provider="cloudinary" />
               <div>
-                <p class="font-semibold">Fatima Zahra</p>
-                <p class="text-argan-light">Fondatrice de la coopérative partenaire</p>
+                <p class="font-semibold">Hassan</p>
+                <p class="text-argan-light">Fondateur de la coopérative partenaire</p>
               </div>
             </div>
           </div>

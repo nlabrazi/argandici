@@ -20,14 +20,17 @@
             <h2 class="font-serif text-lg text-argan-dark">{{ item.name }}</h2>
             <p class="text-argan-gold font-bold mb-2">{{ formatPrice(item.price) }}</p>
             <div class="flex items-center gap-2">
-              <button @click="decrease(item)" class="px-3 py-1 text-xl text-argan-gold hover:text-argan-dark"
+              <button @click="decrease(item)"
+                class="px-3 py-1 text-xl text-argan-gold hover:text-argan-dark cursor-pointer"
                 :disabled="item.quantity <= 1">-</button>
               <span class="font-medium">{{ item.quantity }}</span>
-              <button @click="increase(item)" class="px-3 py-1 text-xl text-argan-gold hover:text-argan-dark">+</button>
+              <button @click="increase(item)"
+                class="px-3 py-1 text-xl text-argan-gold hover:text-argan-dark cursor-pointer">+</button>
             </div>
           </div>
           <div class="flex flex-col items-end">
-            <button @click="remove(item)" class="text-red-400 hover:text-red-700 text-sm mt-2 flex items-center gap-2">
+            <button @click="remove(item)"
+              class="text-red-400 hover:text-red-700 text-sm mt-2 flex items-center gap-2 cursor-pointer">
               <i class="fas fa-trash"></i> Retirer
             </button>
           </div>
@@ -77,43 +80,43 @@ const router = useRouter()
 await products.fetchProducts()
 
 const detailedItems = computed(() =>
-	cart.items.map((li) => {
-		const p = products.getById(li.productId)
-		return {
-			productId: li.productId,
-			quantity: li.quantity,
-			name: p?.name ?? "Produit",
-			image: p?.image ?? "",
-			price: p?.price ?? 0,
-		}
-	}),
+  cart.items.map((li) => {
+    const p = products.getById(li.productId)
+    return {
+      productId: li.productId,
+      quantity: li.quantity,
+      name: p?.name ?? "Produit",
+      image: p?.image ?? "",
+      price: p?.price ?? 0,
+    }
+  }),
 )
 
 const total = computed(() => detailedItems.value.reduce((s, it) => s + it.price * it.quantity, 0))
 
 function formatPrice(price: number) {
-	return price.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })
+  return price.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })
 }
 function increase(item: { productId: string; quantity: number; name: string }) {
-	cart.updateQuantity(item.productId, item.quantity + 1)
-	notifications.showToast(`Quantité augmentée : ${item.name}`, "info")
+  cart.updateQuantity(item.productId, item.quantity + 1)
+  notifications.showToast(`Quantité augmentée : ${item.name}`, "info")
 }
 function decrease(item: { productId: string; quantity: number; name: string }) {
-	if (item.quantity > 1) {
-		cart.updateQuantity(item.productId, item.quantity - 1)
-		notifications.showToast(`Quantité diminuée : ${item.name}`, "info")
-	}
+  if (item.quantity > 1) {
+    cart.updateQuantity(item.productId, item.quantity - 1)
+    notifications.showToast(`Quantité diminuée : ${item.name}`, "info")
+  }
 }
 function remove(item: { productId: string; name: string }) {
-	cart.removeFromCart(item.productId)
-	notifications.showToast(`${item.name} retiré du panier`, "warning")
+  cart.removeFromCart(item.productId)
+  notifications.showToast(`${item.name} retiré du panier`, "warning")
 }
 function clear() {
-	cart.clearCart()
-	notifications.showToast("Panier vidé", "warning")
+  cart.clearCart()
+  notifications.showToast("Panier vidé", "warning")
 }
 function checkout() {
-	notifications.showToast("Veuillez renseigner vos infos pour finaliser la commande.", "info")
-	router.push("/checkout")
+  notifications.showToast("Veuillez renseigner vos infos pour finaliser la commande.", "info")
+  router.push("/checkout")
 }
 </script>

@@ -9,7 +9,9 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div v-for="product in items" :key="product.id"
           class="border border-argan-light rounded-xl overflow-hidden transition-transform hover:scale-[1.02]">
-          <NuxtImg :src="product.image" :alt="product.name" class="w-full h-64 object-cover" />
+          <NuxtLink :to="`/products/${product.id}`">
+            <NuxtImg :src="product.image" :alt="product.name" class="w-full h-64 object-contain bg-argan-light" />
+          </NuxtLink>
           <div class="p-6">
             <h3 class="font-serif text-xl mb-2">{{ product.name }}</h3>
             <p class="text-gray-600 mb-4">{{ product.description }}</p>
